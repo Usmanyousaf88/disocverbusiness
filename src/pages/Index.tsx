@@ -19,36 +19,57 @@ const Index = () => {
 
   const generateCombinations = (interests: string[]): string[][] => {
     const combinations: string[][] = [];
+    const triplets: string[][] = [];
+    const quadruplets: string[][] = [];
     
-    // Generate pairs
-    for (let i = 0; i < interests.length; i++) {
-      for (let j = i + 1; j < interests.length; j++) {
-        combinations.push([interests[i], interests[j]]);
-      }
-    }
-    
-    // Generate triplets and larger combinations up to 4 elements
-    for (let size = 3; size <= Math.min(4, interests.length); size++) {
-      for (let i = 0; i < interests.length - size + 1; i++) {
-        for (let j = i + 1; j < interests.length - size + 2; j++) {
-          for (let k = j + 1; k < interests.length - size + 3; k++) {
-            if (size === 3) {
-              combinations.push([interests[i], interests[j], interests[k]]);
-            } else {
-              for (let l = k + 1; l < interests.length; l++) {
-                combinations.push([interests[i], interests[j], interests[k], interests[l]]);
-              }
-            }
-          }
+    // Generate triplets
+    for (let i = 0; i < interests.length - 2; i++) {
+      for (let j = i + 1; j < interests.length - 1; j++) {
+        for (let k = j + 1; k < interests.length; k++) {
+          triplets.push([interests[i], interests[j], interests[k]]);
         }
       }
     }
     
-    return combinations;
+    // Generate quadruplets
+    for (let i = 0; i < interests.length - 3; i++) {
+      for (let j = i + 1; j < interests.length - 2; j++) {
+        for (let k = j + 1; k < interests.length - 1; k++) {
+          for (let l = k + 1; l < interests.length; l++) {
+            quadruplets.push([interests[i], interests[j], interests[k], interests[l]]);
+          }
+        }
+      }
+    }
+
+    // Randomly select combinations to get a total of 15
+    // We'll aim for roughly 60% triplets and 40% quadruplets
+    const shuffledTriplets = triplets.sort(() => Math.random() - 0.5);
+    const shuffledQuadruplets = quadruplets.sort(() => Math.random() - 0.5);
+
+    const numberOfTriplets = Math.min(9, shuffledTriplets.length);
+    const numberOfQuadruplets = Math.min(6, shuffledQuadruplets.length);
+
+    combinations.push(...shuffledTriplets.slice(0, numberOfTriplets));
+    combinations.push(...shuffledQuadruplets.slice(0, numberOfQuadruplets));
+
+    // If we don't have enough combinations, add more from either category
+    while (combinations.length < 15 && 
+           (shuffledTriplets.length > numberOfTriplets || 
+            shuffledQuadruplets.length > numberOfQuadruplets)) {
+      if (combinations.length < 15 && shuffledTriplets.length > numberOfTriplets) {
+        combinations.push(shuffledTriplets[numberOfTriplets]);
+      }
+      if (combinations.length < 15 && shuffledQuadruplets.length > numberOfQuadruplets) {
+        combinations.push(shuffledQuadruplets[numberOfQuadruplets]);
+      }
+    }
+
+    // Shuffle the final combinations
+    return combinations.sort(() => Math.random() - 0.5).slice(0, 15);
   };
 
   const getInterestName = (id: string): string => {
-    // Import the predefinedInterests from InterestSelector component
     const interest = InterestSelector.predefinedInterests?.find((i) => i.id === id);
     return interest ? interest.name : "";
   };
