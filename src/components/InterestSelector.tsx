@@ -94,7 +94,7 @@ const InterestSelector: InterestSelectorType = ({
                 <Button
                   key={interest.id}
                   variant={selectedInterests.includes(interest.id) ? "default" : "outline"}
-                  className={`h-14 flex items-center justify-start px-3 gap-2 transition-all text-xs relative overflow-hidden group ${
+                  className={`h-auto min-h-[3.5rem] flex items-center justify-start px-3 gap-2 transition-all text-xs relative overflow-hidden group ${
                     selectedInterests.includes(interest.id)
                       ? "bg-gradient-to-br from-primary to-primary-hover text-white shadow-lg"
                       : "hover:border-primary hover:text-primary bg-gradient-to-br from-white to-gray-50 hover:shadow-md"
@@ -103,7 +103,7 @@ const InterestSelector: InterestSelectorType = ({
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <span className="text-lg flex-shrink-0">{interest.icon}</span>
-                  <span className="truncate font-medium text-left flex-1">{interest.name}</span>
+                  <span className="truncate font-medium text-left flex-1 whitespace-normal leading-tight">{interest.name}</span>
                 </Button>
               ))}
             </div>
