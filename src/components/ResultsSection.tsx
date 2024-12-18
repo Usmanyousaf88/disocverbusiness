@@ -19,7 +19,7 @@ interface ResultsSectionProps {
 }
 
 const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, apiKey }) => {
-  const [loadingDeepDive, setLoadingDeepDive] = useState<number | null>(null);
+  const [loadingDeepDive, setLoadingDeepDive] = useState<{[key: string]: boolean}>({});
   const { toast } = useToast();
 
   if (!showResults) return null;
@@ -45,7 +45,7 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
           const [header, ...content] = section.split(':');
           if (header && content) {
             return `<div class="mt-4">
-              <strong class="text-primary block mb-2 text-sm font-semibold">${header.trim()}:</strong>
+              <strong class="text-primary block mb-2 text-xs uppercase tracking-wide">${header.trim()}:</strong>
               <div class="text-sm text-gray-600 leading-relaxed">${content.join(':').trim()}</div>
             </div>`;
           }
@@ -73,8 +73,8 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
     return gradients[index % gradients.length];
   };
 
-  const handleDiveDeeper = async (idea: string, index: number) => {
-    setLoadingDeepDive(index);
+  const handleDiveDeeper = async (idea: string, uniqueKey: string) => {
+    setLoadingDeepDive(prev => ({ ...prev, [uniqueKey]: true }));
     try {
       const prompt = `This is my business idea to follow my passions and provide value for others so i can make an income:
 ${idea}
@@ -114,10 +114,14 @@ Please return only the requested information properly formatted with good readab
       const data = await response.json();
       const deepDiveResponse = data.choices[0].message.content;
 
-      useCases[index] = {
-        ...useCases[index],
-        deepDiveResponse,
-      };
+      // Update the specific useCase with the deep dive response
+      const [useCaseIndex] = uniqueKey.split('-').map(Number);
+      if (useCases[useCaseIndex]) {
+        useCases[useCaseIndex] = {
+          ...useCases[useCaseIndex],
+          deepDiveResponse,
+        };
+      }
 
       toast({
         title: "Deep dive analysis complete",
@@ -130,52 +134,61 @@ Please return only the requested information properly formatted with good readab
         variant: "destructive",
       });
     } finally {
-      setLoadingDeepDive(null);
+      setLoadingDeepDive(prev => ({ ...prev, [uniqueKey]: false }));
     }
   };
 
   return (
     <div className="space-y-8">
-      {useCases.map((useCase, index) => {
-        const ideas = useCase.aiResponse ? splitIdeasFromResponse(useCase.aiResponse) : [];
+      {useCases.map((useCase, useCaseIndex) => {
+        if (!useCase.aiResponse) return null;
         
-        return ideas.map((idea, ideaIndex) => (
-          <div 
-            key={`${index}-${ideaIndex}`} 
-            className={`rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl ${getGradientClass(ideaIndex)}`}
-          >
-            <div className="p-6">
-              <div 
-                className="prose max-w-none"
-                dangerouslySetInnerHTML={{ 
-                  __html: formatText(idea)
-                }}
-              />
-              
-              <div className="mt-6 pt-4 border-t border-gray-200">
-                <Button
-                  onClick={() => handleDiveDeeper(idea, index)}
-                  disabled={loadingDeepDive === index}
-                  className="bg-primary hover:bg-primary-hover text-white transition-colors duration-300"
+        const ideas = splitIdeasFromResponse(useCase.aiResponse);
+        
+        return (
+          <div key={useCaseIndex} className="space-y-8">
+            {ideas.map((idea, ideaIndex) => {
+              const uniqueKey = `${useCaseIndex}-${ideaIndex}`;
+              return (
+                <div 
+                  key={uniqueKey}
+                  className={`rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl ${getGradientClass(ideaIndex)}`}
                 >
-                  {loadingDeepDive === index ? "Analyzing..." : "Dive deeper"}
-                </Button>
-              </div>
+                  <div className="p-6">
+                    <div 
+                      className="prose max-w-none"
+                      dangerouslySetInnerHTML={{ 
+                        __html: formatText(idea)
+                      }}
+                    />
+                    
+                    <div className="mt-6 pt-4 border-t border-gray-200">
+                      <Button
+                        onClick={() => handleDiveDeeper(idea, uniqueKey)}
+                        disabled={loadingDeepDive[uniqueKey]}
+                        className="bg-primary hover:bg-primary-hover text-white transition-colors duration-300"
+                      >
+                        {loadingDeepDive[uniqueKey] ? "Analyzing..." : "Dive deeper"}
+                      </Button>
+                    </div>
 
-              {useCase.deepDiveResponse && loadingDeepDive === null && (
-                <div className="mt-6 p-4 bg-white/50 backdrop-blur-sm rounded-lg shadow-inner">
-                  <h4 className="text-lg font-semibold text-primary mb-3">Detailed Analysis:</h4>
-                  <div 
-                    className="prose prose-sm max-w-none"
-                    dangerouslySetInnerHTML={{ 
-                      __html: formatText(useCase.deepDiveResponse)
-                    }}
-                  />
+                    {useCase.deepDiveResponse && !loadingDeepDive[uniqueKey] && (
+                      <div className="mt-6 p-4 bg-white/50 backdrop-blur-sm rounded-lg shadow-inner">
+                        <h4 className="text-lg font-semibold text-primary mb-3">Detailed Analysis:</h4>
+                        <div 
+                          className="prose prose-sm max-w-none"
+                          dangerouslySetInnerHTML={{ 
+                            __html: formatText(useCase.deepDiveResponse)
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-            </div>
+              );
+            })}
           </div>
-        ));
+        );
       })}
     </div>
   );
