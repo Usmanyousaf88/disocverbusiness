@@ -25,12 +25,11 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
 
   if (!showResults) return null;
 
-  // Split the AI response into individual ideas
+  // Split the AI response into individual ideas based on horizontal line separator
   const splitIdeasFromResponse = (response: string): string[] => {
-    // Split the response by numbered items (1., 2., 3., etc.)
-    const ideas = response.split(/(?=\d\.[\s\n])/).filter(idea => idea.trim());
-    // Take only the first 5 ideas
-    return ideas.slice(0, 5);
+    // Split by horizontal line (---) and filter out empty strings
+    const ideas = response.split(/---+/).map(idea => idea.trim()).filter(Boolean);
+    return ideas;
   };
 
   const handleDiveDeeper = async (idea: string, index: number) => {
