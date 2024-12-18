@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import SelectedInterests from "./SelectedInterests";
 import { categoryEmojis } from "@/constants/categoryEmojis";
+import { Interest } from "@/types/interests";
 import { creativeArtsInterests } from "@/data/interests/creativeArts";
 import { technologyInterests } from "@/data/interests/technology";
 import { foodAndCulinaryInterests } from "@/data/interests/foodAndCulinary";
