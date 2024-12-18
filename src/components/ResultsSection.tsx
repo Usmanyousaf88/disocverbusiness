@@ -26,23 +26,19 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
 
   return (
     <div className="space-y-8">
-      {useCases.map((useCase, useCaseIndex) => {
+      {useCases.map((useCase) => {
         if (!useCase.aiResponse) return null;
         
         const ideas = splitIdeasFromResponse(useCase.aiResponse);
         
-        return (
-          <div key={useCaseIndex} className="space-y-8">
-            {ideas.map((idea, ideaIndex) => (
-              <BusinessIdeaCard
-                key={`${useCaseIndex}-${ideaIndex}`}
-                idea={idea}
-                index={ideaIndex}
-                apiKey={apiKey}
-              />
-            ))}
-          </div>
-        );
+        return ideas.map((idea, ideaIndex) => (
+          <BusinessIdeaCard
+            key={`idea-${ideaIndex}`}
+            idea={idea}
+            index={ideaIndex}
+            apiKey={apiKey}
+          />
+        ));
       })}
     </div>
   );
