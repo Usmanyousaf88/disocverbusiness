@@ -42,9 +42,10 @@ export const generatePrompt = (combinations: string[][]): string => {
   return `These are some combinations of my interests that i would like to explore for potential business ideas or ways to make money:
 ${combinationsText}
 
-Please analyze these combinations and search on the internet which ones have the most potential through analyzing if there is a market-ask for. Find the 5 most potential combinations that can be easy to start business ideas where i can combine my passions and provide value for others so i can generate income. The 5 business ideas must be totally different, they must provide value for individuals or company's and at least 2 of them need to enable me to earn money within 1 month.
+Please analyze these combinations and search on the internet which ones have the most potential for a unique business idea. Find the 5 most potential combinations that can become easy to start businesses or way's to make money where i can combine my passions and provide value for others so i can generate income. 
+The 5 business ideas must be totally different, they must be actually unique but very promising in these modern times. They also must provide value for individuals or company's and at least 2 of them need to enable me to earn money within 1 month.
 
-The 5 ideas that you return must provide the idea + combination of interests used, the potential clients, what i need to do daily, what i need to charge to generate a decent income, how i can get my first client and how long it will take to earn money.
+The 5 outputs that you return must provide the idea + combination of interests used, the potential clients, what i need to do daily, what i need to charge to generate a decent income, how i can get my first client and how long it will take to earn money.
 
 Please return only the 5 extensive business idea's, seperated by a horizontal line and properly formatted with bold titles, great readability and no other text. Mention at least 1 example of a look-a-like business or person currently active. don't mention any other sources from the internet.`;
 };
