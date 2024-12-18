@@ -1,6 +1,6 @@
 import { Interest } from "@/types/interests";
 
-export const healthAndWellnessInterests: Interest[] = [
+export const healthAndwellnessInterests: Interest[] = [
   { id: "3", name: "Fitness", icon: "💪", category: "Health & Wellness" },
   { id: "13", name: "Yoga", icon: "🧘", category: "Health & Wellness" },
   { id: "18", name: "Meditation", icon: "🧘‍♂️", category: "Health & Wellness" },
@@ -40,5 +40,36 @@ export const healthAndWellnessInterests: Interest[] = [
   { id: "hw26", name: "Wellness Blogging", icon: "💻", category: "Health & Wellness" },
   { id: "hw27", name: "Wellness Consulting", icon: "💼", category: "Health & Wellness" },
   { id: "hw28", name: "Wellness Marketing", icon: "📢", category: "Health & Wellness" },
-  { id: "hw29", name: "Wellness Events", icon: "📅", category: "Health & Wellness" }
+  { id: "hw29", name: "Wellness Events", icon: "📅", category: "Health & Wellness" },
+  { id: "hw30", name: "Health Coaching", icon: "📋", category: "Health & Wellness" },
+  { id: "hw31", name: "Sports Medicine", icon: "⚕️", category: "Health & Wellness" },
+  { id: "hw32", name: "Physical Therapy", icon: "💆", category: "Health & Wellness" },
+  { id: "hw33", name: "Occupational Therapy", icon: "🦾", category: "Health & Wellness" },
+  { id: "hw34", name: "Speech Therapy", icon: "🗣️", category: "Health & Wellness" },
+  { id: "hw35", name: "Respiratory Therapy", icon: "🫁", category: "Health & Wellness" },
+  { id: "hw36", name: "Chiropractic", icon: "🦴", category: "Health & Wellness" },
+  { id: "hw37", name: "Osteopathy", icon: "🦴", category: "Health & Wellness" },
+  { id: "hw38", name: "Naturopathy", icon: "🌿", category: "Health & Wellness" },
+  { id: "hw39", name: "Homeopathy", icon: "💊", category: "Health & Wellness" },
+  { id: "hw40", name: "Ayurveda", icon: "🍃", category: "Health & Wellness" },
+  { id: "hw41", name: "Traditional Chinese Medicine", icon: "🧉", category: "Health & Wellness" },
+  { id: "hw42", name: "Reflexology", icon: "🦶", category: "Health & Wellness" },
+  { id: "hw43", name: "Reiki", icon: "✨", category: "Health & Wellness" },
+  { id: "hw44", name: "Chakra Healing", icon: "🌈", category: "Health & Wellness" },
+  { id: "hw45", name: "Biofeedback", icon: "📊", category: "Health & Wellness" },
+  { id: "hw46", name: "Hypnotherapy", icon: "🌀", category: "Health & Wellness" },
+  { id: "hw47", name: "Life Coaching", icon: "🎯", category: "Health & Wellness" },
+  { id: "hw48", name: "Health Coaching", icon: "📋", category: "Health & Wellness" },
+  { id: "hw49", name: "Wellness Consulting", icon: "💼", category: "Health & Wellness" },
+  { id: "hw50", name: "Health Education", icon: "📚", category: "Health & Wellness" },
+  { id: "hw51", name: "Public Health", icon: "🏥", category: "Health & Wellness" },
+  { id: "hw52", name: "Health Policy", icon: "📜", category: "Health & Wellness" },
+  { id: "hw53", name: "Health Administration", icon: "👔", category: "Health & Wellness" },
+  { id: "hw54", name: "Health Technology", icon: "💻", category: "Health & Wellness" },
+  { id: "hw55", name: "Digital Health", icon: "📱", category: "Health & Wellness" },
+  { id: "hw56", name: "Telemedicine", icon: "🏥", category: "Health & Wellness" },
+  { id: "hw57", name: "Health Analytics", icon: "📊", category: "Health & Wellness" },
+  { id: "hw58", name: "Health Research", icon: "🔬", category: "Health & Wellness" },
+  { id: "hw59", name: "Health Writing", icon: "✍️", category: "Health & Wellness" },
+  { id: "hw60", name: "Health Communication", icon: "📢", category: "Health & Wellness" }
 ];
