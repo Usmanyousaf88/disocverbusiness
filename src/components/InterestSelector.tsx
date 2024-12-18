@@ -117,7 +117,7 @@ const predefinedInterests: Interest[] = [
   { id: "109", name: "Prop Making", icon: "🎪", category: "Creative Arts" },
   { id: "110", name: "Puppet Making", icon: "🎭", category: "Creative Arts" },
   { id: "111", name: "Mask Making", icon: "😷", category: "Creative Arts" },
-  { id: "112", name: "Special Effects", icon: "✨", category: "Creative Arts" }
+  { id: "112", name: "Special Effects", icon: "✨", category: "Creative Arts" },
 
   // Adding more interests to ensure each category has at least 60
   { id: "113", name: "Digital Illustration", icon: "🖌️", category: "Creative Arts" },
