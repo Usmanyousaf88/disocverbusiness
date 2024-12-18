@@ -37,33 +37,34 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
     formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     
     // Split the text into sections based on common headers
-    const sections = formattedText.split(/(?=\n(?:Combination of interests used:|Potential Clients|Daily Tasks|Pricing|First Client|Timeline|Similar Business):)/g);
+    const sections = formattedText.split(/(?=\n(?:Combination of interests used:|Potential Clients|Daily Tasks|Pricing|First Client|Timeline|Similar Business|Example business or person):)/g);
     
     if (sections.length > 1) {
       // Format the first section (main idea) differently
       const mainIdea = sections[0].trim();
       
+      // Extract the combination of interests section
+      const interestsSection = sections.find(section => section.includes("Combination of interests used"))?.split(':')[1]?.trim() || '';
+      
       // Format the remaining sections with better spacing and structure
-      const formattedSections = sections.slice(1).map(section => {
-        const [header, ...content] = section.split(':');
-        if (header && content) {
-          // Special formatting for "Combination of interests used"
-          if (header.trim().includes("Combination of interests used")) {
-            return `<div class="text-sm text-gray-600 mt-2 mb-6">
-              ${header.trim()}: ${content.join(':').trim()}
+      const formattedSections = sections.slice(1)
+        .filter(section => !section.includes("Combination of interests used"))
+        .map(section => {
+          const [header, ...content] = section.split(':');
+          if (header && content) {
+            return `<div class="mt-6">
+              <strong class="text-primary block mb-2 text-lg">${header.trim()}:</strong>
+              <div class="text-base text-gray-700 leading-relaxed">${content.join(':').trim()}</div>
             </div>`;
           }
-          // Regular section formatting
-          return `<div class="mt-6">
-            <strong class="text-primary block mb-2 text-lg">${header.trim()}:</strong>
-            <div class="text-base text-gray-700">${content.join(':').trim()}</div>
-          </div>`;
-        }
-        return section;
-      });
+          return section;
+        });
 
-      return `<div class="text-2xl font-semibold mb-2 text-primary">${mainIdea}</div>
-              ${formattedSections.join('\n')}`;
+      return `
+        <div class="text-2xl font-semibold mb-2 text-primary">${mainIdea}</div>
+        <div class="text-sm text-gray-500 mb-6 italic">${interestsSection}</div>
+        ${formattedSections.join('\n')}
+      `;
     }
 
     return formattedText;
@@ -153,7 +154,7 @@ Please return only the requested information properly formatted with good readab
           >
             <div className="p-8">
               <div 
-                className="prose prose-lg max-w-none space-y-4"
+                className="prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ 
                   __html: formatText(idea)
                 }}
