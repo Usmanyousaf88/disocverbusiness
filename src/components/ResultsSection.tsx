@@ -30,8 +30,36 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
   };
 
   const formatText = (text: string): string => {
+    // Remove "Business Idea:" from the text
+    let formattedText = text.replace(/Business Idea:/g, '');
+    
     // Replace markdown bold syntax with HTML bold tags
-    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // Split the text into sections based on common headers
+    const sections = formattedText.split(/(?=\n(?:Potential Clients|Daily Tasks|Pricing|First Client|Timeline|Similar Business):)/g);
+    
+    if (sections.length > 1) {
+      // Format the first section (main idea) differently
+      const mainIdea = sections[0].trim();
+      
+      // Format the remaining sections with better spacing and structure
+      const formattedSections = sections.slice(1).map(section => {
+        const [header, ...content] = section.split(':');
+        if (header && content) {
+          return `<div class="mt-4">
+            <strong class="text-primary block mb-2">${header.trim()}:</strong>
+            <div class="ml-0">${content.join(':').trim()}</div>
+          </div>`;
+        }
+        return section;
+      });
+
+      return `<div class="text-xl font-semibold mb-6 text-primary">${mainIdea}</div>
+              ${formattedSections.join('\n')}`;
+    }
+
+    return formattedText;
   };
 
   const getGradientClass = (index: number): string => {
@@ -118,7 +146,7 @@ Please return only the requested information properly formatted with good readab
           >
             <div className="p-8">
               <div 
-                className="prose prose-lg max-w-none"
+                className="prose prose-lg max-w-none space-y-4"
                 dangerouslySetInnerHTML={{ 
                   __html: formatText(idea)
                 }}
