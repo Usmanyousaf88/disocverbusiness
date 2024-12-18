@@ -89,12 +89,12 @@ const InterestSelector: InterestSelectorType = ({
 
         {categories.map((category) => (
           <TabsContent key={category} value={category}>
-            <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-2 pt-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 pt-2">
               {groupedInterests[category].map((interest) => (
                 <Button
                   key={interest.id}
                   variant={selectedInterests.includes(interest.id) ? "default" : "outline"}
-                  className={`h-16 flex flex-col items-center justify-center gap-1 transition-all text-[0.7rem] relative overflow-hidden group ${
+                  className={`h-14 flex items-center justify-start px-3 gap-2 transition-all text-sm relative overflow-hidden group ${
                     selectedInterests.includes(interest.id)
                       ? "bg-gradient-to-br from-primary to-primary-hover text-white shadow-lg"
                       : "hover:border-primary hover:text-primary bg-gradient-to-br from-white to-gray-50 hover:shadow-md"
@@ -102,8 +102,8 @@ const InterestSelector: InterestSelectorType = ({
                   onClick={() => onInterestSelect(interest.id)}
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <span className="text-lg">{interest.icon}</span>
-                  <span className="truncate w-full px-1 font-medium">{interest.name}</span>
+                  <span className="text-lg flex-shrink-0">{interest.icon}</span>
+                  <span className="truncate font-medium text-left flex-1">{interest.name}</span>
                 </Button>
               ))}
             </div>
