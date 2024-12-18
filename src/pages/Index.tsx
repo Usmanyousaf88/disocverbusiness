@@ -214,7 +214,7 @@ const Index = () => {
               disabled={isLoading || selectedInterests.length < 2 || selectedInterests.length > 8}
               className="bg-gradient-to-r from-primary to-primary-hover hover:from-primary-hover hover:to-primary text-white px-8 py-2 shadow-md hover:shadow-lg transition-all duration-300"
             >
-              {isLoading ? "Generating..." : "Generate Combinations"}
+              {isLoading ? "Generating..." : "Explore potential combinations"}
             </Button>
           </div>
         </div>
