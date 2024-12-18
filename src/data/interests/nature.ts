@@ -27,13 +27,11 @@ export const natureInterests: Interest[] = [
   { id: "nat24", name: "Nature Education", icon: "📚", category: "Nature" },
   { id: "nat25", name: "Nature Therapy", icon: "🧘‍♀️", category: "Nature" },
   { id: "nat26", name: "Wilderness Survival", icon: "🏕️", category: "Nature" },
-  // Removing duplicate "Nature Conservation" (was nat27, already exists as nat11)
   { id: "nat27", name: "Habitat Restoration", icon: "🌳", category: "Nature" },
   { id: "nat28", name: "Wildlife Rescue", icon: "🦊", category: "Nature" },
   { id: "nat29", name: "Animal Tracking", icon: "🐾", category: "Nature" },
   { id: "nat30", name: "Nature Journaling", icon: "📔", category: "Nature" },
   { id: "nat31", name: "Nature Meditation", icon: "🧘‍♂️", category: "Nature" },
-  // Removing duplicate "Nature Photography" (was nat32, already exists as nat23)
   { id: "nat32", name: "Wildlife Photography", icon: "📸", category: "Nature" },
   { id: "nat33", name: "Nature Sketching", icon: "✏️", category: "Nature" },
   { id: "nat34", name: "Nature Painting", icon: "🎨", category: "Nature" },
@@ -43,19 +41,12 @@ export const natureInterests: Interest[] = [
   { id: "nat38", name: "Nature Podcasting", icon: "🎙️", category: "Nature" },
   { id: "nat39", name: "Nature Research", icon: "🔬", category: "Nature" },
   { id: "nat40", name: "Nature Education", icon: "📚", category: "Nature" },
-  // Removing duplicate "Nature Conservation" (was nat41, already exists as nat11)
   { id: "nat41", name: "Conservation Biology", icon: "🌳", category: "Nature" },
-  // Removing duplicate "Nature Photography" (was nat42, already exists as nat23)
   { id: "nat42", name: "Landscape Photography", icon: "📸", category: "Nature" },
-  // Removing duplicate "Nature Writing" (was nat43, already exists as nat21)
   { id: "nat43", name: "Environmental Writing", icon: "✍️", category: "Nature" },
-  // Removing duplicate "Nature Art" (was nat44, already exists as nat22)
   { id: "nat44", name: "Environmental Art", icon: "🎨", category: "Nature" },
-  // Removing duplicate "Nature Education" (was nat45, already exists as nat24)
   { id: "nat45", name: "Environmental Education", icon: "📚", category: "Nature" },
-  // Removing duplicate "Nature Therapy" (was nat46, already exists as nat25)
   { id: "nat46", name: "Ecotherapy", icon: "🧘‍♀️", category: "Nature" },
-  // Removing duplicate "Nature Research" (was nat47, already exists as nat39)
   { id: "nat47", name: "Field Research", icon: "🔬", category: "Nature" },
   { id: "nat48", name: "Nature Tourism", icon: "🏞️", category: "Nature" },
   { id: "nat49", name: "Nature Protection", icon: "🛡️", category: "Nature" },
@@ -70,3 +61,4 @@ export const natureInterests: Interest[] = [
   { id: "nat58", name: "Nature Ethics", icon: "🤝", category: "Nature" },
   { id: "nat59", name: "Nature Philosophy", icon: "🤔", category: "Nature" },
   { id: "nat60", name: "Nature Spirituality", icon: "🕊️", category: "Nature" }
+];

@@ -48,11 +48,8 @@ export const healthAndWellnessInterests: Interest[] = [
   { id: "hw45", name: "Biofeedback", icon: "📊", category: "Health & Wellness" },
   { id: "hw46", name: "Hypnotherapy", icon: "🌀", category: "Health & Wellness" },
   { id: "hw47", name: "Life Coaching", icon: "🎯", category: "Health & Wellness" },
-  // Removing duplicate "Health Coaching" (was hw48, already exists as hw30)
   { id: "hw48", name: "Wellness Mentoring", icon: "📋", category: "Health & Wellness" },
-  // Removing duplicate "Wellness Consulting" (was hw49, already exists as hw27)
   { id: "hw49", name: "Health Consulting", icon: "💼", category: "Health & Wellness" },
-  // Removing duplicate "Health Education" (was hw50, already exists as hw24)
   { id: "hw50", name: "Health Literacy", icon: "📚", category: "Health & Wellness" },
   { id: "hw51", name: "Public Health", icon: "🏥", category: "Health & Wellness" },
   { id: "hw52", name: "Health Policy", icon: "📜", category: "Health & Wellness" },
@@ -64,3 +61,4 @@ export const healthAndWellnessInterests: Interest[] = [
   { id: "hw58", name: "Health Research", icon: "🔬", category: "Health & Wellness" },
   { id: "hw59", name: "Health Writing", icon: "✍️", category: "Health & Wellness" },
   { id: "hw60", name: "Health Communication", icon: "📢", category: "Health & Wellness" }
+];
