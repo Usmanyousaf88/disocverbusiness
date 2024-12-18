@@ -10,6 +10,7 @@ import { generateCombinations, generatePrompt } from "@/utils/combinationGenerat
 const Index = () => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [isInterestSelectorCollapsed, setIsInterestSelectorCollapsed] = useState(false);
   const [useCases, setUseCases] = useState<Array<{
     title: string;
     description: string;
@@ -55,6 +56,7 @@ const Index = () => {
     }
 
     setIsLoading(true);
+    setIsInterestSelectorCollapsed(true);
     try {
       const combinations = generateCombinations(selectedInterests);
       const prompt = generatePrompt(combinations.map(combo => combo.map(getInterestName)));
@@ -133,6 +135,7 @@ const Index = () => {
           <InterestSelector
             selectedInterests={selectedInterests}
             onInterestSelect={handleInterestSelect}
+            isCollapsed={isInterestSelectorCollapsed}
           />
           <AnalysisButton
             isLoading={isLoading}

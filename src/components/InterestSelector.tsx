@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import SelectedInterests from "./SelectedInterests";
@@ -44,6 +44,7 @@ const predefinedInterests: Interest[] = [
 interface InterestSelectorProps {
   selectedInterests: string[];
   onInterestSelect: (id: string) => void;
+  isCollapsed?: boolean;
 }
 
 type InterestSelectorType = React.FC<InterestSelectorProps> & {
@@ -53,7 +54,11 @@ type InterestSelectorType = React.FC<InterestSelectorProps> & {
 const InterestSelector: InterestSelectorType = ({
   selectedInterests,
   onInterestSelect,
+  isCollapsed = false,
 }) => {
+  const [isExpanded, setIsExpanded] = useState(!isCollapsed);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
   // Group interests by category
   const groupedInterests = predefinedInterests.reduce((acc, interest) => {
     if (!acc[interest.category]) {
@@ -65,6 +70,11 @@ const InterestSelector: InterestSelectorType = ({
 
   const categories = Object.keys(groupedInterests).sort();
 
+  const handleCategoryClick = (category: string) => {
+    setActiveCategory(category);
+    setIsExpanded(true);
+  };
+
   return (
     <div className="space-y-4">
       <SelectedInterests
@@ -73,7 +83,12 @@ const InterestSelector: InterestSelectorType = ({
         onInterestSelect={onInterestSelect}
       />
 
-      <Tabs defaultValue={categories[0]} className="w-full">
+      <Tabs 
+        defaultValue={categories[0]} 
+        className="w-full"
+        value={activeCategory || categories[0]}
+        onValueChange={handleCategoryClick}
+      >
         <TabsList className="flex flex-wrap h-auto gap-2 bg-transparent">
           {categories.map((category) => (
             <TabsTrigger
@@ -87,7 +102,7 @@ const InterestSelector: InterestSelectorType = ({
           ))}
         </TabsList>
 
-        {categories.map((category) => (
+        {isExpanded && categories.map((category) => (
           <TabsContent key={category} value={category}>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 pt-2">
               {groupedInterests[category].map((interest) => (
