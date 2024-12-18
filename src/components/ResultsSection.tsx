@@ -25,6 +25,14 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
 
   if (!showResults) return null;
 
+  // Split the AI response into individual ideas
+  const splitIdeasFromResponse = (response: string): string[] => {
+    // Split the response by numbered items (1., 2., 3., etc.)
+    const ideas = response.split(/(?=\d\.[\s\n])/).filter(idea => idea.trim());
+    // Take only the first 5 ideas
+    return ideas.slice(0, 5);
+  };
+
   const handleDiveDeeper = async (idea: string, index: number) => {
     setLoadingDeepDive(index);
     try {
@@ -89,25 +97,27 @@ Please return only the requested information properly formatted with good readab
 
   return (
     <div className="space-y-8">
-      {useCases.map((useCase, index) => (
-        <div key={index} className="bg-gradient-to-br from-white to-gray-50 rounded-lg shadow-lg p-6">
-          <UseCaseCard {...useCase} />
-          <div className="mt-4 space-y-4">
+      {useCases.map((useCase, index) => {
+        // Split the AI response into individual ideas if it exists
+        const ideas = useCase.aiResponse ? splitIdeasFromResponse(useCase.aiResponse) : [];
+        
+        return ideas.map((idea, ideaIndex) => (
+          <div key={`${index}-${ideaIndex}`} className="bg-gradient-to-br from-white to-gray-50 rounded-lg shadow-lg p-6">
             <div className="p-4 bg-gradient-to-br from-gray-50 to-white rounded-md">
-              <h4 className="font-semibold mb-2">Business Idea:</h4>
-              <p className="text-sm text-gray-600 whitespace-pre-wrap">
-                {useCase.aiResponse}
+              <h4 className="font-semibold mb-2 text-xl text-primary">Business Idea {ideaIndex + 1}:</h4>
+              <p className="text-sm text-gray-600 whitespace-pre-wrap mb-4">
+                {idea}
               </p>
               <div className="mt-4">
                 <Button
-                  onClick={() => handleDiveDeeper(useCase.aiResponse || "", index)}
+                  onClick={() => handleDiveDeeper(idea, index)}
                   disabled={loadingDeepDive === index}
                   className="bg-primary hover:bg-primary-hover text-white"
                 >
                   {loadingDeepDive === index ? "Analyzing..." : "Dive deeper"}
                 </Button>
               </div>
-              {useCase.deepDiveResponse && (
+              {useCase.deepDiveResponse && loadingDeepDive === null && (
                 <div className="mt-6 p-4 bg-blue-50 rounded-md">
                   <h4 className="font-semibold mb-2 text-blue-800">Detailed Analysis:</h4>
                   <p className="text-sm text-gray-700 whitespace-pre-wrap">
@@ -117,8 +127,8 @@ Please return only the requested information properly formatted with good readab
               )}
             </div>
           </div>
-        </div>
-      ))}
+        ));
+      })}
     </div>
   );
 };
