@@ -43,7 +43,7 @@ export const generatePrompt = (combinations: string[][]): string => {
   return `These are some combinations of my interests that i would like to explore for potential business ideas or ways to make money:
 ${combinationsText}
 
-Please analyze these combinations and search on the internet which ones have the most potential through analyzing if there is a market-ask for. Find the 10 most potential combinations that can be easy to start business ideas where i can combine my passions and provide value for others so i can generate income. The 10 business ideas must be totally different, they must provide value for individuals or company's and at least 2 of them need to enable me to earn money within 1 month.
+Please analyze these combinations and do a search for every combination on the internet to find the 20 most potential combinations that can become a business idea. apply your reasoning to find the 10 most potential combinations that would have the most potential for me to make money where i can combine my passions and provide value for others. The 10 best business ideas must be totally different, they must provide value for individuals or company's and at least 2 of them need to enable me to earn money within 1 month.
 
 The 10 ideas that you return must provide the following in a clean list:
 - Name
