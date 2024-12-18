@@ -1,6 +1,13 @@
 export const generateCombinations = (interests: string[]): string[][] => {
   const combinations: string[][] = [];
   
+  // Generate combinations of 2
+  for (let i = 0; i < interests.length - 1; i++) {
+    for (let j = i + 1; j < interests.length; j++) {
+      combinations.push([interests[i], interests[j]]);
+    }
+  }
+  
   // Generate combinations of 3
   for (let i = 0; i < interests.length - 2; i++) {
     for (let j = i + 1; j < interests.length - 1; j++) {
@@ -21,19 +28,6 @@ export const generateCombinations = (interests: string[]): string[][] => {
     }
   }
   
-  // Generate combinations of 5
-  for (let i = 0; i < interests.length - 4; i++) {
-    for (let j = i + 1; j < interests.length - 3; j++) {
-      for (let k = j + 1; k < interests.length - 2; k++) {
-        for (let l = k + 1; l < interests.length - 1; l++) {
-          for (let m = l + 1; m < interests.length; m++) {
-            combinations.push([interests[i], interests[j], interests[k], interests[l], interests[m]]);
-          }
-        }
-      }
-    }
-  }
-  
   // Shuffle and limit to 50 combinations
   return combinations
     .sort(() => Math.random() - 0.5)
@@ -48,7 +42,7 @@ export const generatePrompt = (combinations: string[][]): string => {
   return `These are some combinations of my interests that i would like to explore for potential business ideas:
 ${combinationsText}
 
-Please analyze these combinations and search them all on the internet and find the 5 most potential combinations that can be easy to start business ideas where i can follow my passion and provide value for others so i can generate income. 
+Please analyze these combinations and search on the internet which ones have the most potentiality for starting a business. Find the 5 most potential combinations that can be easy to start business ideas where i can combine my passions and provide value for others so i can generate income. The 5 business ideas must be totally different and at least 2 of them need to enable me to earn money within 1 month.
 
 The 5 business ideas that you return must provide the idea, the potential clients, what i need to do daily, what i need to charge to generate a decent income, how i can get my first client and how long it will take to earn money.
 
