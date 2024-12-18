@@ -79,7 +79,7 @@ const InterestSelector: InterestSelectorType = ({
             <TabsTrigger
               key={category}
               value={category}
-              className="data-[state=active]:bg-primary data-[state=active]:text-white"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-hover data-[state=active]:text-white transition-all duration-300"
             >
               <span className="mr-2">{categoryEmojis[category] || "📌"}</span>
               {category}
@@ -89,20 +89,21 @@ const InterestSelector: InterestSelectorType = ({
 
         {categories.map((category) => (
           <TabsContent key={category} value={category}>
-            <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-1 pt-2">
+            <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-2 pt-2">
               {groupedInterests[category].map((interest) => (
                 <Button
                   key={interest.id}
                   variant={selectedInterests.includes(interest.id) ? "default" : "outline"}
-                  className={`h-14 flex flex-col items-center justify-center gap-0.5 transition-all text-[0.6rem] ${
+                  className={`h-16 flex flex-col items-center justify-center gap-1 transition-all text-[0.7rem] relative overflow-hidden group ${
                     selectedInterests.includes(interest.id)
-                      ? "bg-primary text-white"
-                      : "hover:border-primary hover:text-primary"
+                      ? "bg-gradient-to-br from-primary to-primary-hover text-white shadow-lg"
+                      : "hover:border-primary hover:text-primary bg-gradient-to-br from-white to-gray-50 hover:shadow-md"
                   }`}
                   onClick={() => onInterestSelect(interest.id)}
                 >
-                  <span className="text-base">{interest.icon}</span>
-                  <span className="truncate w-full px-0.5">{interest.name}</span>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <span className="text-lg">{interest.icon}</span>
+                  <span className="truncate w-full px-1 font-medium">{interest.name}</span>
                 </Button>
               ))}
             </div>

@@ -130,7 +130,7 @@ const Index = () => {
   }>>([]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-light to-white p-6">
+    <div className="min-h-screen bg-gradient-to-br from-primary-light via-white to-white p-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -141,7 +141,7 @@ const Index = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <div className="bg-gradient-to-br from-white to-gray-50 rounded-lg shadow-lg p-6 mb-8">
           <h2 className="text-2xl font-semibold mb-6">Select Your Interests</h2>
           <InterestSelector
             selectedInterests={selectedInterests}
@@ -151,7 +151,7 @@ const Index = () => {
             <Button
               onClick={handleAnalyze}
               disabled={selectedInterests.length < 2 || selectedInterests.length > 8}
-              className="bg-primary hover:bg-primary-hover text-white px-8 py-2"
+              className="bg-gradient-to-r from-primary to-primary-hover hover:from-primary-hover hover:to-primary text-white px-8 py-2 shadow-md hover:shadow-lg transition-all duration-300"
             >
               Generate Combinations
             </Button>
@@ -161,9 +161,9 @@ const Index = () => {
         {showResults && (
           <div className="space-y-8">
             {useCases.map((useCase, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-lg p-6">
+              <div key={index} className="bg-gradient-to-br from-white to-gray-50 rounded-lg shadow-lg p-6">
                 <UseCaseCard {...useCase} />
-                <div className="mt-4 p-4 bg-gray-50 rounded-md">
+                <div className="mt-4 p-4 bg-gradient-to-br from-gray-50 to-white rounded-md">
                   <h4 className="font-semibold mb-2">AI Prompt:</h4>
                   <p className="text-sm text-gray-600 whitespace-pre-wrap">
                     {useCase.prompt}

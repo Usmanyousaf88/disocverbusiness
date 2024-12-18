@@ -17,7 +17,7 @@ const SelectedInterests: React.FC<SelectedInterestsProps> = ({
   if (selectedInterests.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap gap-2 p-4 bg-gray-50 rounded-lg animate-fadeIn">
+    <div className="flex flex-wrap gap-2 p-4 bg-gradient-to-br from-gray-50 to-white rounded-lg shadow-sm animate-fadeIn">
       {selectedInterests.map((id) => {
         const interest = interests.find((i) => i.id === id);
         if (!interest) return null;
@@ -25,7 +25,7 @@ const SelectedInterests: React.FC<SelectedInterestsProps> = ({
           <Button
             key={interest.id}
             variant="default"
-            className="bg-primary text-white flex items-center gap-1 group"
+            className="bg-gradient-to-r from-primary to-primary-hover text-white flex items-center gap-1 group hover:shadow-md transition-all duration-300"
             onClick={() => onInterestSelect(interest.id)}
           >
             <span>{interest.icon}</span>
