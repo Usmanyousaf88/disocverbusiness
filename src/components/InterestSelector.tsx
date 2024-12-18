@@ -3,11 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import SelectedInterests from "./SelectedInterests";
 import { categoryEmojis } from "@/constants/categoryEmojis";
-import { Interest } from "@/types/interests";
 import { creativeArtsInterests } from "@/data/interests/creativeArts";
 import { technologyInterests } from "@/data/interests/technology";
 import { foodAndCulinaryInterests } from "@/data/interests/foodAndCulinary";
-import { healthAndwellnessInterests } from "@/data/interests/healthAndWellness";
+import { healthAndWellnessInterests } from "@/data/interests/healthAndWellness";
 import { educationInterests } from "@/data/interests/education";
 import { performingArtsInterests } from "@/data/interests/performingArts";
 import { entertainmentInterests } from "@/data/interests/entertainment";
@@ -26,7 +25,7 @@ const predefinedInterests: Interest[] = [
   ...creativeArtsInterests,
   ...technologyInterests,
   ...foodAndCulinaryInterests,
-  ...healthAndwellnessInterests,
+  ...healthAndWellnessInterests,
   ...educationInterests,
   ...performingArtsInterests,
   ...entertainmentInterests,
