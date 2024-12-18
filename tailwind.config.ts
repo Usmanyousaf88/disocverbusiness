@@ -66,7 +66,24 @@ export default {
       animation: {
         fadeIn: "fadeIn 0.5s ease-out",
       },
+      typography: {
+        lg: {
+          css: {
+            'strong': {
+              color: '#8B5CF6',
+              fontWeight: '700',
+            },
+            'h1, h2, h3, h4': {
+              color: '#8B5CF6',
+              fontWeight: '700',
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography")
+  ],
 } satisfies Config;

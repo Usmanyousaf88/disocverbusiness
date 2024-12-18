@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import UseCaseCard from "@/components/UseCaseCard";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -25,11 +24,25 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
 
   if (!showResults) return null;
 
-  // Split the AI response into individual ideas based on horizontal line separator
   const splitIdeasFromResponse = (response: string): string[] => {
-    // Split by horizontal line (---) and filter out empty strings
     const ideas = response.split(/---+/).map(idea => idea.trim()).filter(Boolean);
     return ideas;
+  };
+
+  const formatText = (text: string): string => {
+    // Replace markdown bold syntax with HTML bold tags
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  };
+
+  const getGradientClass = (index: number): string => {
+    const gradients = [
+      'bg-gradient-to-br from-purple-100 via-white to-purple-50',
+      'bg-gradient-to-br from-blue-100 via-white to-blue-50',
+      'bg-gradient-to-br from-green-100 via-white to-green-50',
+      'bg-gradient-to-br from-pink-100 via-white to-pink-50',
+      'bg-gradient-to-br from-yellow-100 via-white to-yellow-50'
+    ];
+    return gradients[index % gradients.length];
   };
 
   const handleDiveDeeper = async (idea: string, index: number) => {
@@ -73,7 +86,6 @@ Please return only the requested information properly formatted with good readab
       const data = await response.json();
       const deepDiveResponse = data.choices[0].message.content;
 
-      // Update the specific useCase with the deep dive response
       useCases[index] = {
         ...useCases[index],
         deepDiveResponse,
@@ -97,31 +109,38 @@ Please return only the requested information properly formatted with good readab
   return (
     <div className="space-y-8">
       {useCases.map((useCase, index) => {
-        // Split the AI response into individual ideas if it exists
         const ideas = useCase.aiResponse ? splitIdeasFromResponse(useCase.aiResponse) : [];
         
         return ideas.map((idea, ideaIndex) => (
-          <div key={`${index}-${ideaIndex}`} className="bg-gradient-to-br from-white to-gray-50 rounded-lg shadow-lg p-6">
-            <div className="p-4 bg-gradient-to-br from-gray-50 to-white rounded-md">
-              <h4 className="font-semibold mb-2 text-xl text-primary">Business Idea {ideaIndex + 1}:</h4>
-              <p className="text-sm text-gray-600 whitespace-pre-wrap mb-4">
-                {idea}
-              </p>
-              <div className="mt-4">
+          <div 
+            key={`${index}-${ideaIndex}`} 
+            className={`rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl ${getGradientClass(ideaIndex)}`}
+          >
+            <div className="p-8">
+              <div 
+                className="prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ 
+                  __html: formatText(idea)
+                }}
+              />
+              <div className="mt-6">
                 <Button
                   onClick={() => handleDiveDeeper(idea, index)}
                   disabled={loadingDeepDive === index}
-                  className="bg-primary hover:bg-primary-hover text-white"
+                  className="bg-primary hover:bg-primary-hover text-white transition-colors duration-300"
                 >
                   {loadingDeepDive === index ? "Analyzing..." : "Dive deeper"}
                 </Button>
               </div>
               {useCase.deepDiveResponse && loadingDeepDive === null && (
-                <div className="mt-6 p-4 bg-blue-50 rounded-md">
-                  <h4 className="font-semibold mb-2 text-blue-800">Detailed Analysis:</h4>
-                  <p className="text-sm text-gray-700 whitespace-pre-wrap">
-                    {useCase.deepDiveResponse}
-                  </p>
+                <div className="mt-8 p-6 bg-white/50 backdrop-blur-sm rounded-lg shadow-inner">
+                  <h4 className="text-xl font-semibold text-primary mb-4">Detailed Analysis:</h4>
+                  <div 
+                    className="prose prose-lg max-w-none"
+                    dangerouslySetInnerHTML={{ 
+                      __html: formatText(useCase.deepDiveResponse)
+                    }}
+                  />
                 </div>
               )}
             </div>
