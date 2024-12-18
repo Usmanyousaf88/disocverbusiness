@@ -94,7 +94,7 @@ const InterestSelector: InterestSelectorType = ({
                 <Button
                   key={interest.id}
                   variant={selectedInterests.includes(interest.id) ? "default" : "outline"}
-                  className={`h-14 flex items-center justify-start px-3 gap-2 transition-all text-sm relative overflow-hidden group ${
+                  className={`h-14 flex items-center justify-start px-3 gap-2 transition-all text-xs relative overflow-hidden group ${
                     selectedInterests.includes(interest.id)
                       ? "bg-gradient-to-br from-primary to-primary-hover text-white shadow-lg"
                       : "hover:border-primary hover:text-primary bg-gradient-to-br from-white to-gray-50 hover:shadow-md"
