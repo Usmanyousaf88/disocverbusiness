@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 
 interface AnalysisButtonProps {
@@ -8,6 +9,8 @@ interface AnalysisButtonProps {
 }
 
 const AnalysisButton: React.FC<AnalysisButtonProps> = ({ isLoading, disabled, onClick }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="mt-8 text-center">
       <Button
@@ -17,11 +20,11 @@ const AnalysisButton: React.FC<AnalysisButtonProps> = ({ isLoading, disabled, on
       >
         {isLoading ? (
           <div className="flex flex-col items-center">
-            <span>Generating...</span>
-            <span className="text-xs text-white/70 mt-1">This may take up to 30 seconds</span>
+            <span>{t('generating')}</span>
+            <span className="text-xs text-white/70 mt-1">{t('generatingDescription')}</span>
           </div>
         ) : (
-          "Explore potential combinations"
+          t('exploreButton')
         )}
       </Button>
     </div>
