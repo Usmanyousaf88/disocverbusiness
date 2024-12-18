@@ -31,7 +31,7 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
       const prompt = `This is my business idea to follow my passions and provide value for others so i can make an income:
 ${idea}
 
-Please provide me with the following:
+Please analyze the internet if there is potential for this idea to work. based on the analisis, give me a reasoned reaction in 3 sentences and then provide me with the following:
 1. 5 nice business names for this plan
 2. The first 5 simple steps i need to take to start with this plan
 3. Where i can find my first 5 clients
