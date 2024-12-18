@@ -42,9 +42,9 @@ export const generatePrompt = (combinations: string[][]): string => {
   return `These are some combinations of my interests that i would like to explore for potential business ideas:
 ${combinationsText}
 
-Please analyze these combinations and search on the internet which ones have the most potentiality for starting a business. Find the 5 most potential combinations that can be easy to start business ideas where i can combine my passions and provide value for others so i can generate income. The 5 business ideas must be totally different and at least 2 of them need to enable me to earn money within 1 month.
+Please analyze these combinations and search on the internet which ones have the most potential through analyzing if there is a market-ask for. Find the 5 most potential combinations that can be easy to start business ideas where i can combine my passions and provide value for others so i can generate income. The 5 business ideas must be totally different and at least 2 of them need to enable me to earn money within 1 month.
 
-The 5 business ideas that you return must provide the idea, the potential clients, what i need to do daily, what i need to charge to generate a decent income, how i can get my first client and how long it will take to earn money.
+The 5 business ideas that you return must provide the idea + combination of interests used, the potential clients, what i need to do daily, what i need to charge to generate a decent income, how i can get my first client and how long it will take to earn money.
 
-Please return only the 5 extensive business idea's without anything else and don't mention any sources from the internet.`;
+Please return only the 5 extensive business idea's properly formatted with great readability without anything else and mention at least 1 example of a look-a-like business currently active. don't mention any other sources from the internet.`;
 };
