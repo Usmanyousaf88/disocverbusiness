@@ -30,39 +30,31 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
   };
 
   const formatText = (text: string): string => {
-    // Remove "Business Idea:" from the text
     let formattedText = text.replace(/Business Idea:/g, '');
-    
-    // Replace markdown bold syntax with HTML bold tags
     formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     
-    // Split the text into sections based on common headers
     const sections = formattedText.split(/(?=\n(?:Combination of interests used:|Potential Clients|Daily Tasks|Pricing|First Client|Timeline|Similar Business|Example business or person):)/g);
     
     if (sections.length > 1) {
-      // Format the first section (main idea) differently
       const mainIdea = sections[0].trim();
-      
-      // Extract the combination of interests section
       const interestsSection = sections.find(section => section.includes("Combination of interests used"))?.split(':')[1]?.trim() || '';
       
-      // Format the remaining sections with better spacing and structure
       const formattedSections = sections.slice(1)
         .filter(section => !section.includes("Combination of interests used"))
         .map(section => {
           const [header, ...content] = section.split(':');
           if (header && content) {
-            return `<div class="mt-8 border-t pt-6">
-              <strong class="text-primary block mb-4 text-xl">${header.trim()}:</strong>
-              <div class="text-base text-gray-700 leading-relaxed pl-4">${content.join(':').trim()}</div>
+            return `<div class="mt-4">
+              <strong class="text-primary block mb-2 text-sm font-semibold">${header.trim()}:</strong>
+              <div class="text-sm text-gray-600 leading-relaxed">${content.join(':').trim()}</div>
             </div>`;
           }
           return section;
         });
 
       return `
-        <div class="text-2xl font-bold mb-3 text-primary">${mainIdea}</div>
-        <div class="text-xs text-gray-400 mb-8 italic">Combination of interests: ${interestsSection}</div>
+        <div class="text-2xl font-bold mb-2 text-primary">${mainIdea}</div>
+        <div class="text-xs text-gray-400 mb-4 italic">Combination of interests: ${interestsSection}</div>
         ${formattedSections.join('\n')}
       `;
     }
@@ -143,7 +135,7 @@ Please return only the requested information properly formatted with good readab
   };
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-8">
       {useCases.map((useCase, index) => {
         const ideas = useCase.aiResponse ? splitIdeasFromResponse(useCase.aiResponse) : [];
         
@@ -152,14 +144,15 @@ Please return only the requested information properly formatted with good readab
             key={`${index}-${ideaIndex}`} 
             className={`rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl ${getGradientClass(ideaIndex)}`}
           >
-            <div className="p-8">
+            <div className="p-6">
               <div 
-                className="prose prose-lg max-w-none"
+                className="prose max-w-none"
                 dangerouslySetInnerHTML={{ 
                   __html: formatText(idea)
                 }}
               />
-              <div className="mt-8 border-t pt-6">
+              
+              <div className="mt-6 pt-4 border-t border-gray-200">
                 <Button
                   onClick={() => handleDiveDeeper(idea, index)}
                   disabled={loadingDeepDive === index}
@@ -168,11 +161,12 @@ Please return only the requested information properly formatted with good readab
                   {loadingDeepDive === index ? "Analyzing..." : "Dive deeper"}
                 </Button>
               </div>
+
               {useCase.deepDiveResponse && loadingDeepDive === null && (
-                <div className="mt-8 p-6 bg-white/50 backdrop-blur-sm rounded-lg shadow-inner">
-                  <h4 className="text-xl font-semibold text-primary mb-4">Detailed Analysis:</h4>
+                <div className="mt-6 p-4 bg-white/50 backdrop-blur-sm rounded-lg shadow-inner">
+                  <h4 className="text-lg font-semibold text-primary mb-3">Detailed Analysis:</h4>
                   <div 
-                    className="prose prose-lg max-w-none"
+                    className="prose prose-sm max-w-none"
                     dangerouslySetInnerHTML={{ 
                       __html: formatText(useCase.deepDiveResponse)
                     }}
