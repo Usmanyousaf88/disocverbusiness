@@ -1,6 +1,6 @@
 import { Interest } from "@/types/interests";
 
-export const healthAndwellnessInterests: Interest[] = [
+export const healthAndWellnessInterests: Interest[] = [
   { id: "3", name: "Fitness", icon: "💪", category: "Health & Wellness" },
   { id: "13", name: "Yoga", icon: "🧘", category: "Health & Wellness" },
   { id: "18", name: "Meditation", icon: "🧘‍♂️", category: "Health & Wellness" },
