@@ -46,5 +46,5 @@ Please analyze these combinations and search on the internet which ones have the
 
 The 5 ideas that you return must provide the idea + combination of interests used, the potential clients, what i need to do daily, what i need to charge to generate a decent income, how i can get my first client and how long it will take to earn money.
 
-Please return only the 5 extensive business idea's properly formatted with bold titles, great readability and no other text. Mention at least 1 example of a look-a-like business or person currently active. don't mention any other sources from the internet.`;
+Please return only the 5 extensive business idea's, seperated by a horizontal line and properly formatted with bold titles, great readability and no other text. Mention at least 1 example of a look-a-like business or person currently active. don't mention any other sources from the internet.`;
 };
