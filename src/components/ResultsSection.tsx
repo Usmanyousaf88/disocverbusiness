@@ -37,7 +37,7 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
     formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     
     // Split the text into sections based on common headers
-    const sections = formattedText.split(/(?=\n(?:Potential Clients|Daily Tasks|Pricing|First Client|Timeline|Similar Business):)/g);
+    const sections = formattedText.split(/(?=\n(?:Combination of interests used:|Potential Clients|Daily Tasks|Pricing|First Client|Timeline|Similar Business):)/g);
     
     if (sections.length > 1) {
       // Format the first section (main idea) differently
@@ -47,15 +47,22 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
       const formattedSections = sections.slice(1).map(section => {
         const [header, ...content] = section.split(':');
         if (header && content) {
-          return `<div class="mt-4">
-            <strong class="text-primary block mb-2">${header.trim()}:</strong>
-            <div class="ml-0">${content.join(':').trim()}</div>
+          // Special formatting for "Combination of interests used"
+          if (header.trim().includes("Combination of interests used")) {
+            return `<div class="text-sm text-gray-600 mt-2 mb-6">
+              ${header.trim()}: ${content.join(':').trim()}
+            </div>`;
+          }
+          // Regular section formatting
+          return `<div class="mt-6">
+            <strong class="text-primary block mb-2 text-lg">${header.trim()}:</strong>
+            <div class="text-base text-gray-700">${content.join(':').trim()}</div>
           </div>`;
         }
         return section;
       });
 
-      return `<div class="text-xl font-semibold mb-6 text-primary">${mainIdea}</div>
+      return `<div class="text-2xl font-semibold mb-2 text-primary">${mainIdea}</div>
               ${formattedSections.join('\n')}`;
     }
 
