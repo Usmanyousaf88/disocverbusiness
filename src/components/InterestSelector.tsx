@@ -65,7 +65,13 @@ const predefinedInterests: Interest[] = [
   { id: "55", name: "Astronomy", icon: "⭐" },
   { id: "56", name: "Bird Watching", icon: "🦅" },
   { id: "57", name: "Foraging", icon: "🍄" },
-  { id: "58", name: "Travel Planning", icon: "✈️" }
+  { id: "58", name: "Travel Planning", icon: "✈️" },
+  { id: "59", name: "Coaching", icon: "🏆" },
+  { id: "60", name: "Consulting", icon: "💼" },
+  { id: "61", name: "Mentoring", icon: "🤝" },
+  { id: "62", name: "Storytelling", icon: "📖" },
+  { id: "63", name: "Digital Marketing", icon: "📣" },
+  { id: "64", name: "Community Building", icon: "🌐" }
 ];
 
 interface InterestSelectorProps {
