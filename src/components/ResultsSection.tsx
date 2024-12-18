@@ -52,17 +52,17 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
         .map(section => {
           const [header, ...content] = section.split(':');
           if (header && content) {
-            return `<div class="mt-6">
-              <strong class="text-primary block mb-2 text-lg">${header.trim()}:</strong>
-              <div class="text-base text-gray-700 leading-relaxed">${content.join(':').trim()}</div>
+            return `<div class="mt-8 border-t pt-6">
+              <strong class="text-primary block mb-4 text-xl">${header.trim()}:</strong>
+              <div class="text-base text-gray-700 leading-relaxed pl-4">${content.join(':').trim()}</div>
             </div>`;
           }
           return section;
         });
 
       return `
-        <div class="text-2xl font-semibold mb-2 text-primary">${mainIdea}</div>
-        <div class="text-sm text-gray-500 mb-6 italic">${interestsSection}</div>
+        <div class="text-2xl font-bold mb-3 text-primary">${mainIdea}</div>
+        <div class="text-xs text-gray-400 mb-8 italic">Combination of interests: ${interestsSection}</div>
         ${formattedSections.join('\n')}
       `;
     }
@@ -143,7 +143,7 @@ Please return only the requested information properly formatted with good readab
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       {useCases.map((useCase, index) => {
         const ideas = useCase.aiResponse ? splitIdeasFromResponse(useCase.aiResponse) : [];
         
@@ -159,7 +159,7 @@ Please return only the requested information properly formatted with good readab
                   __html: formatText(idea)
                 }}
               />
-              <div className="mt-6">
+              <div className="mt-8 border-t pt-6">
                 <Button
                   onClick={() => handleDiveDeeper(idea, index)}
                   disabled={loadingDeepDive === index}
