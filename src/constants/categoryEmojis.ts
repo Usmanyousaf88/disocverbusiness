@@ -1,0 +1,20 @@
+export const categoryEmojis: Record<string, string> = {
+  "Creative Arts": "🎨",
+  "Food & Culinary": "🍳",
+  "Health & Wellness": "💪",
+  "Technology": "💻",
+  "Education": "📚",
+  "Performing Arts": "🎭",
+  "Entertainment": "🎮",
+  "Lifestyle": "🌟",
+  "Media": "📱",
+  "Business": "💼",
+  "Science": "🔬",
+  "Games": "🎲",
+  "Sports": "⚽",
+  "Nature": "🌿",
+  "Social": "👥",
+  "Finance": "💰",
+  "Skills": "🛠️",
+  "Crafts": "🎨"
+};

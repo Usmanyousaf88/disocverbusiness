@@ -1,14 +1,9 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { X } from "lucide-react";
-
-interface Interest {
-  id: string;
-  name: string;
-  icon: string;
-  category: string;
-}
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import SelectedInterests from "./SelectedInterests";
+import { categoryEmojis } from "@/constants/categoryEmojis";
+import { Interest } from "@/types/interests";
 
 const predefinedInterests: Interest[] = [
   { id: "1", name: "Writing", icon: "✍️", category: "Creative Arts" },
@@ -151,57 +146,48 @@ const InterestSelector: InterestSelectorType = ({
 
   return (
     <div className="space-y-4">
-      {/* Selected Interests */}
-      {selectedInterests.length > 0 && (
-        <div className="flex flex-wrap gap-2 p-4 bg-gray-50 rounded-lg animate-fadeIn">
-          {selectedInterests.map((id) => {
-            const interest = predefinedInterests.find((i) => i.id === id);
-            if (!interest) return null;
-            return (
-              <Button
-                key={interest.id}
-                variant="default"
-                className="bg-primary text-white flex items-center gap-1 group"
-                onClick={() => onInterestSelect(interest.id)}
-              >
-                <span>{interest.icon}</span>
-                <span>{interest.name}</span>
-                <X className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </Button>
-            );
-          })}
-        </div>
-      )}
+      <SelectedInterests
+        selectedInterests={selectedInterests}
+        interests={predefinedInterests}
+        onInterestSelect={onInterestSelect}
+      />
 
-      {/* Categorized Interests */}
-      <Accordion type="multiple" className="w-full">
-        {categories.map((category) => (
-          <AccordionItem key={category} value={category}>
-            <AccordionTrigger className="text-lg font-medium">
+      <Tabs defaultValue={categories[0]} className="w-full">
+        <TabsList className="flex flex-wrap h-auto gap-2 bg-transparent">
+          {categories.map((category) => (
+            <TabsTrigger
+              key={category}
+              value={category}
+              className="data-[state=active]:bg-primary data-[state=active]:text-white"
+            >
+              <span className="mr-2">{categoryEmojis[category] || "📌"}</span>
               {category}
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-1 pt-2">
-                {groupedInterests[category].map((interest) => (
-                  <Button
-                    key={interest.id}
-                    variant={selectedInterests.includes(interest.id) ? "default" : "outline"}
-                    className={`h-14 flex flex-col items-center justify-center gap-0.5 transition-all text-[0.6rem] ${
-                      selectedInterests.includes(interest.id)
-                        ? "bg-primary text-white"
-                        : "hover:border-primary hover:text-primary"
-                    }`}
-                    onClick={() => onInterestSelect(interest.id)}
-                  >
-                    <span className="text-base">{interest.icon}</span>
-                    <span className="truncate w-full px-0.5">{interest.name}</span>
-                  </Button>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+
+        {categories.map((category) => (
+          <TabsContent key={category} value={category}>
+            <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-1 pt-2">
+              {groupedInterests[category].map((interest) => (
+                <Button
+                  key={interest.id}
+                  variant={selectedInterests.includes(interest.id) ? "default" : "outline"}
+                  className={`h-14 flex flex-col items-center justify-center gap-0.5 transition-all text-[0.6rem] ${
+                    selectedInterests.includes(interest.id)
+                      ? "bg-primary text-white"
+                      : "hover:border-primary hover:text-primary"
+                  }`}
+                  onClick={() => onInterestSelect(interest.id)}
+                >
+                  <span className="text-base">{interest.icon}</span>
+                  <span className="truncate w-full px-0.5">{interest.name}</span>
+                </Button>
+              ))}
+            </div>
+          </TabsContent>
         ))}
-      </Accordion>
+      </Tabs>
     </div>
   );
 };
