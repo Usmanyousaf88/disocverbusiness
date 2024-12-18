@@ -28,30 +28,26 @@ const BusinessIdeaCard = ({ idea, index, apiKey }: BusinessIdeaCardProps) => {
     let formattedText = text.replace(/Business Idea:/g, '');
     formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     
-    const sections = formattedText.split(/(?=\n(?:Combination of interests used:|Potential Clients|Daily Tasks|Pricing|First Client|Timeline|Similar Business|Example business or person):)/g);
+    // Split by sections
+    const sections = formattedText.split(/(?=\n(?:Name:|Example business or person:))/g);
     
     if (sections.length > 1) {
       const mainIdea = sections[0].trim();
-      const interestsSection = sections.find(section => section.includes("Combination of interests used"))?.split(':')[1]?.trim() || '';
       
       const formattedSections = sections.slice(1)
-        .filter(section => !section.includes("Combination of interests used"))
         .map(section => {
           const [header, ...content] = section.split(':');
           if (header && content) {
-            return `<div class="mt-4">
-              <strong class="text-primary block mb-2 text-xs uppercase tracking-wide">${header.trim()}:</strong>
-              <div class="text-sm text-gray-600 leading-relaxed">${content.join(':').trim()}</div>
-            </div>`;
+            if (header.trim() === 'Name') {
+              return `<div class="text-2xl font-bold mb-2 text-primary">${content.join(':').trim()}</div>`;
+            } else if (header.trim() === 'Example business or person') {
+              return `<div class="text-sm text-gray-600 italic mb-4">Similar to: ${content.join(':').trim()}</div>`;
+            }
           }
           return section;
         });
 
-      return `
-        <div class="text-2xl font-bold mb-2 text-primary">${mainIdea}</div>
-        <div class="text-xs text-gray-400 mb-4 italic">Combination of interests: ${interestsSection}</div>
-        ${formattedSections.join('\n')}
-      `;
+      return formattedSections.join('\n');
     }
 
     return formattedText;
