@@ -1,15 +1,13 @@
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
 import InterestSelector from "@/components/InterestSelector";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import ApiKeyInput from "@/components/ApiKeyInput";
 import ResultsSection from "@/components/ResultsSection";
 import AnalysisButton from "@/components/AnalysisButton";
-import LanguageSelector from "@/components/LanguageSelector";
 import { generateCombinations, generatePrompt } from "@/utils/combinationGenerator";
 
 const Index = () => {
-  const { t } = useTranslation();
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [useCases, setUseCases] = useState<Array<{
@@ -40,8 +38,8 @@ const Index = () => {
   const handleAnalyze = async () => {
     if (!apiKey) {
       toast({
-        title: t('apiKeyRequired'),
-        description: t('enterApiKey'),
+        title: "API Key Required",
+        description: "Please enter your OpenAI API key to generate combinations",
         variant: "destructive",
       });
       return;
@@ -49,8 +47,8 @@ const Index = () => {
 
     if (selectedInterests.length < 3) {
       toast({
-        title: t('minimumInterests'),
-        description: t('moreInterests'),
+        title: "Please select at least 3 interests",
+        description: "More interests create more interesting combinations!",
         variant: "destructive",
       });
       return;
@@ -92,7 +90,7 @@ const Index = () => {
       const aiResponse = data.choices[0].message.content;
 
       setUseCases([{
-        title: t('generatedOpportunities'),
+        title: "Combined Interests Analysis",
         description: "AI-generated business opportunities based on your interests",
         steps: ["Analyze market opportunities", "Identify target audience", "Create initial offering", "Test and validate"],
         audience: "Entrepreneurs interested in " + selectedInterests.map(getInterestName).join(", "),
@@ -102,13 +100,13 @@ const Index = () => {
       
       setShowResults(true);
       toast({
-        title: t('success'),
-        description: t('generatedOpportunities'),
+        title: "Success!",
+        description: "Generated business opportunities based on your interests",
       });
     } catch (error) {
       toast({
-        title: t('error'),
-        description: t('failedGenerate'),
+        title: "Error",
+        description: "Failed to generate AI responses. Please check your API key and try again.",
         variant: "destructive",
       });
     } finally {
@@ -119,20 +117,19 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-light via-white to-white p-6">
       <div className="max-w-4xl mx-auto">
-        <LanguageSelector />
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            {t('title')}
+            Discover Your Passion-Driven Income
           </h1>
           <p className="text-lg text-gray-600">
-            {t('subtitle')}
+            Select 3 or more interests to explore unique business opportunities
           </p>
         </div>
 
         <div className="bg-gradient-to-br from-white to-gray-50 rounded-lg shadow-lg p-6 mb-8">
           <ApiKeyInput apiKey={apiKey} setApiKey={setApiKey} />
 
-          <h2 className="text-2xl font-semibold mb-6">{t('selectInterests')}</h2>
+          <h2 className="text-2xl font-semibold mb-6">Select Your Interests</h2>
           <InterestSelector
             selectedInterests={selectedInterests}
             onInterestSelect={handleInterestSelect}
