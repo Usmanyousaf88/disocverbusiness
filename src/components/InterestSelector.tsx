@@ -84,20 +84,20 @@ const InterestSelector: React.FC<InterestSelectorProps> = ({
   onInterestSelect,
 }) => {
   return (
-    <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-2 animate-fadeIn">
+    <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-1 animate-fadeIn">
       {predefinedInterests.map((interest) => (
         <Button
           key={interest.id}
           variant={selectedInterests.includes(interest.id) ? "default" : "outline"}
-          className={`h-16 flex flex-col items-center justify-center gap-1 transition-all text-xs ${
+          className={`h-14 flex flex-col items-center justify-center gap-0.5 transition-all text-[0.6rem] ${
             selectedInterests.includes(interest.id)
               ? "bg-primary text-white"
               : "hover:border-primary hover:text-primary"
           }`}
           onClick={() => onInterestSelect(interest.id)}
         >
-          <span className="text-lg">{interest.icon}</span>
-          <span className="truncate w-full px-1">{interest.name}</span>
+          <span className="text-base">{interest.icon}</span>
+          <span className="truncate w-full px-0.5">{interest.name}</span>
         </Button>
       ))}
     </div>
