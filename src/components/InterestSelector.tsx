@@ -152,4 +152,6 @@ const InterestSelector: React.FC<InterestSelectorProps> = ({
   );
 };
 
+InterestSelector.predefinedInterests = predefinedInterests;
+
 export default InterestSelector;

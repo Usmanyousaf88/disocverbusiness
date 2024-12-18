@@ -27,11 +27,19 @@ const Index = () => {
       }
     }
     
-    // Generate triplets
-    for (let i = 0; i < interests.length; i++) {
-      for (let j = i + 1; j < interests.length; j++) {
-        for (let k = j + 1; k < interests.length; k++) {
-          combinations.push([interests[i], interests[j], interests[k]]);
+    // Generate triplets and larger combinations up to 4 elements
+    for (let size = 3; size <= Math.min(4, interests.length); size++) {
+      for (let i = 0; i < interests.length - size + 1; i++) {
+        for (let j = i + 1; j < interests.length - size + 2; j++) {
+          for (let k = j + 1; k < interests.length - size + 3; k++) {
+            if (size === 3) {
+              combinations.push([interests[i], interests[j], interests[k]]);
+            } else {
+              for (let l = k + 1; l < interests.length; l++) {
+                combinations.push([interests[i], interests[j], interests[k], interests[l]]);
+              }
+            }
+          }
         }
       }
     }
@@ -40,7 +48,8 @@ const Index = () => {
   };
 
   const getInterestName = (id: string): string => {
-    const interest = predefinedInterests.find((i) => i.id === id);
+    // Import the predefinedInterests from InterestSelector component
+    const interest = InterestSelector.predefinedInterests?.find((i) => i.id === id);
     return interest ? interest.name : "";
   };
 
@@ -64,10 +73,10 @@ const Index = () => {
       return;
     }
 
-    if (selectedInterests.length > 5) {
+    if (selectedInterests.length > 8) {
       toast({
         title: "Too many interests selected",
-        description: "Please select 5 or fewer interests for better results",
+        description: "Please select 8 or fewer interests for better results",
         variant: "destructive",
       });
       return;
@@ -107,7 +116,7 @@ const Index = () => {
             Discover Your Passion-Driven Income
           </h1>
           <p className="text-lg text-gray-600">
-            Select 2-5 interests to explore unique business opportunities
+            Select 2-8 interests to explore unique business opportunities
           </p>
         </div>
 
@@ -120,7 +129,7 @@ const Index = () => {
           <div className="mt-8 text-center">
             <Button
               onClick={handleAnalyze}
-              disabled={selectedInterests.length < 2 || selectedInterests.length > 5}
+              disabled={selectedInterests.length < 2 || selectedInterests.length > 8}
               className="bg-primary hover:bg-primary-hover text-white px-8 py-2"
             >
               Generate Combinations
