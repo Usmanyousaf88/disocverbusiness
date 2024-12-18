@@ -141,7 +141,11 @@ const Index = () => {
           />
         </div>
 
-        <ResultsSection showResults={showResults} useCases={useCases} />
+        <ResultsSection 
+          showResults={showResults} 
+          useCases={useCases} 
+          apiKey={apiKey}
+        />
       </div>
     </div>
   );
