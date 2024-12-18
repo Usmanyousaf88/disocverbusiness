@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import InterestSelector from "@/components/InterestSelector";
-import UseCaseCard from "@/components/UseCaseCard";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Input } from "@/components/ui/input";
+import ApiKeyInput from "@/components/ApiKeyInput";
+import ResultsSection from "@/components/ResultsSection";
 
 const Index = () => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
@@ -85,21 +85,21 @@ const Index = () => {
 
   const fetchAIResponse = async (prompt: string) => {
     try {
-      const response = await fetch('https://api.perplexity.ai/chat/completions', {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'llama-3.1-sonar-small-128k-online',
+          model: "gpt-4",
           messages: [
             {
-              role: 'system',
-              content: 'You are a business consultant helping entrepreneurs identify unique business opportunities by combining different interests and hobbies. Be specific and actionable in your suggestions.'
+              role: "system",
+              content: "You are a business consultant helping entrepreneurs identify unique business opportunities by combining different interests and hobbies. Be specific and actionable in your suggestions."
             },
             {
-              role: 'user',
+              role: "user",
               content: prompt
             }
           ],
@@ -124,7 +124,7 @@ const Index = () => {
     if (!apiKey) {
       toast({
         title: "API Key Required",
-        description: "Please enter your Perplexity API key to generate combinations",
+        description: "Please enter your OpenAI API key to generate combinations",
         variant: "destructive",
       });
       return;
@@ -201,19 +201,7 @@ const Index = () => {
         </div>
 
         <div className="bg-gradient-to-br from-white to-gray-50 rounded-lg shadow-lg p-6 mb-8">
-          <div className="mb-6">
-            <label htmlFor="apiKey" className="block text-sm font-medium text-gray-700 mb-2">
-              Perplexity API Key
-            </label>
-            <Input
-              id="apiKey"
-              type="password"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              placeholder="Enter your Perplexity API key"
-              className="w-full"
-            />
-          </div>
+          <ApiKeyInput apiKey={apiKey} setApiKey={setApiKey} />
 
           <h2 className="text-2xl font-semibold mb-6">Select Your Interests</h2>
           <InterestSelector
@@ -231,23 +219,7 @@ const Index = () => {
           </div>
         </div>
 
-        {showResults && (
-          <div className="space-y-8">
-            {useCases.map((useCase, index) => (
-              <div key={index} className="bg-gradient-to-br from-white to-gray-50 rounded-lg shadow-lg p-6">
-                <UseCaseCard {...useCase} />
-                <div className="mt-4 space-y-4">
-                  <div className="p-4 bg-gradient-to-br from-gray-50 to-white rounded-md">
-                    <h4 className="font-semibold mb-2">AI Response:</h4>
-                    <p className="text-sm text-gray-600 whitespace-pre-wrap">
-                      {useCase.aiResponse}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        <ResultsSection showResults={showResults} useCases={useCases} />
       </div>
     </div>
   );
