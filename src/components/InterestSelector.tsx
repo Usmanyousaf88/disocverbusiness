@@ -127,7 +127,12 @@ interface InterestSelectorProps {
   onInterestSelect: (id: string) => void;
 }
 
-const InterestSelector: React.FC<InterestSelectorProps> = ({
+// Create a type that extends the functional component with a static property
+type InterestSelectorType = React.FC<InterestSelectorProps> & {
+  predefinedInterests: Interest[];
+};
+
+const InterestSelector: InterestSelectorType = ({
   selectedInterests,
   onInterestSelect,
 }) => {
@@ -152,6 +157,7 @@ const InterestSelector: React.FC<InterestSelectorProps> = ({
   );
 };
 
+// Assign the static property
 InterestSelector.predefinedInterests = predefinedInterests;
 
 export default InterestSelector;
