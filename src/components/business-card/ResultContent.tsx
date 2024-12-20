@@ -14,16 +14,16 @@ const ResultContent: React.FC<ResultContentProps> = ({ content, activeSection })
     
     const sections: Record<ResultSection, string> = {
       'all': content,
-      'business-model': content.split('Success Stories:')[0],
-      'success-stories': content.split('Success Stories:')[1]?.split('Resource Directory:')[0] || '',
-      'resources': content.split('Resource Directory:')[1]?.split('Market Analysis:')[0] || '',
-      'market': content.split('Market Analysis:')[1]?.split('Financial Projections:')[0] || '',
-      'financial': content.split('Financial Projections:')[1]?.split('Implementation Timeline:')[0] || '',
-      'timeline': content.split('Implementation Timeline:')[1]?.split('Marketing Strategy:')[0] || '',
-      'marketing': content.split('Marketing Strategy:')[1]?.split('Risk Assessment:')[0] || '',
-      'risks': content.split('Risk Assessment:')[1]?.split('Networking Opportunities:')[0] || '',
-      'networking': content.split('Networking Opportunities:')[1]?.split('Learning Resources:')[0] || '',
-      'learning': content.split('Learning Resources:')[1] || ''
+      'product-development': content.split('Market Validation:')[0],
+      'market-validation': content.split('Market Validation:')[1]?.split('Monetization Strategy:')[0] || '',
+      'monetization': content.split('Monetization Strategy:')[1]?.split('Technical Infrastructure:')[0] || '',
+      'technical': content.split('Technical Infrastructure:')[1]?.split('Go-to-Market Strategy:')[0] || '',
+      'go-to-market': content.split('Go-to-Market Strategy:')[1]?.split('Business Operations:')[0] || '',
+      'operations': content.split('Business Operations:')[1]?.split('Legal and Compliance:')[0] || '',
+      'legal': content.split('Legal and Compliance:')[1]?.split('Financial Planning:')[0] || '',
+      'financial': content.split('Financial Planning:')[1]?.split('Growth Strategy:')[0] || '',
+      'growth': content.split('Growth Strategy:')[1]?.split('Success Metrics:')[0] || '',
+      'metrics': content.split('Success Metrics:')[1] || ''
     };
     
     return sections[section] || '';

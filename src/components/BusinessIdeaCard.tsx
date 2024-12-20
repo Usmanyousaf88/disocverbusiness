@@ -38,55 +38,65 @@ ${idea}
 
 Please analyze this business idea and provide a comprehensive breakdown including:
 
-Business Model:
-• Revenue streams and business model analysis
-• Key partnerships and resources needed
-• Cost structure overview
+Product Development:
+• Core features and functionalities
+• Technical requirements and stack
+• Development timeline and milestones
+• MVP (Minimum Viable Product) scope
 
-Success Stories:
-• Examples of similar successful businesses
-• Key success factors and metrics
-• Notable achievements in this space
+Market Validation:
+• Target market size and demographics
+• Customer pain points and needs
+• Market gaps and opportunities
+• Competitive advantage analysis
 
-Resource Directory:
-• Essential tools and platforms
-• Recommended software or services
-• Industry-specific resources
+Monetization Strategy:
+• Pricing models and tiers
+• Revenue streams breakdown
+• Subscription vs one-time payment analysis
+• Potential upsell opportunities
 
-Market Analysis:
-• Target audience demographics
-• Competitor landscape
-• Market trends and opportunities
+Technical Infrastructure:
+• Required technology stack
+• Hosting and deployment needs
+• Scalability considerations
+• Security requirements
 
-Financial Projections:
-• Estimated startup costs
-• Potential revenue calculations
+Go-to-Market Strategy:
+• Launch strategy and timeline
+• Marketing channels and tactics
+• Customer acquisition strategy
+• Growth hacking opportunities
+
+Business Operations:
+• Team structure and roles
+• Required skills and expertise
+• Operational processes
+• Quality assurance measures
+
+Legal and Compliance:
+• Required licenses and permits
+• Data protection requirements
+• Terms of service considerations
+• Intellectual property protection
+
+Financial Planning:
+• Initial investment required
+• Operating costs breakdown
+• Revenue projections
 • Break-even analysis
 
-Implementation Timeline:
-• 30/60/90 day action plan
-• Key milestones
-• Critical success metrics
+Growth Strategy:
+• Scaling roadmap
+• Partnership opportunities
+• Market expansion plans
+• Future feature roadmap
 
-Marketing Strategy:
-• Recommended marketing channels
-• Content strategy outline
-• Customer acquisition approach
-
-Risk Assessment:
-• Common challenges and solutions
-• Regulatory considerations
-• Market risks and mitigation
-
-Networking Opportunities:
-• Relevant industry events
-• Professional associations
-• Online communities
-
-Learning Resources:
-• Recommended courses
-• Books and publications
-• Industry certifications
+Success Metrics:
+• Key Performance Indicators (KPIs)
+• Customer success metrics
+• Financial metrics
+• Growth metrics
 
 Please format the response clearly with these exact headings and bullet points.`;
 

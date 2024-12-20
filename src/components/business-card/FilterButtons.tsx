@@ -7,43 +7,36 @@ import {
   BookOpen,
   TrendingUp,
   Wallet,
-  Calendar,
+  Settings,
   Megaphone,
-  AlertTriangle,
-  Network,
-  GraduationCap
+  Network
 } from "lucide-react";
 
 export type ResultSection = 
   | 'all'
-  | 'business-model'
-  | 'success-stories'
-  | 'resources'
-  | 'market'
+  | 'product-development'
+  | 'market-validation'
+  | 'monetization'
+  | 'technical'
+  | 'go-to-market'
+  | 'operations'
+  | 'legal'
   | 'financial'
-  | 'timeline'
-  | 'marketing'
-  | 'risks'
-  | 'networking'
-  | 'learning';
-
-interface FilterButtonsProps {
-  activeSection: ResultSection;
-  setActiveSection: (section: ResultSection) => void;
-}
+  | 'growth'
+  | 'metrics';
 
 export const filterButtons = [
   { id: 'all' as const, label: 'All Results', icon: Target },
-  { id: 'business-model' as const, label: 'Business Model', icon: ChartPieIcon },
-  { id: 'success-stories' as const, label: 'Success Stories', icon: Users },
-  { id: 'resources' as const, label: 'Resources', icon: BookOpen },
-  { id: 'market' as const, label: 'Market Analysis', icon: TrendingUp },
-  { id: 'financial' as const, label: 'Financial', icon: Wallet },
-  { id: 'timeline' as const, label: 'Timeline', icon: Calendar },
-  { id: 'marketing' as const, label: 'Marketing', icon: Megaphone },
-  { id: 'risks' as const, label: 'Risks', icon: AlertTriangle },
-  { id: 'networking' as const, label: 'Networking', icon: Network },
-  { id: 'learning' as const, label: 'Learning', icon: GraduationCap }
+  { id: 'product-development' as const, label: 'Product Development', icon: ChartPieIcon },
+  { id: 'market-validation' as const, label: 'Market Validation', icon: Users },
+  { id: 'monetization' as const, label: 'Monetization', icon: Wallet },
+  { id: 'technical' as const, label: 'Technical', icon: Settings },
+  { id: 'go-to-market' as const, label: 'Go-to-Market', icon: Megaphone },
+  { id: 'operations' as const, label: 'Operations', icon: Network },
+  { id: 'legal' as const, label: 'Legal', icon: BookOpen },
+  { id: 'financial' as const, label: 'Financial', icon: TrendingUp },
+  { id: 'growth' as const, label: 'Growth', icon: TrendingUp },
+  { id: 'metrics' as const, label: 'Success Metrics', icon: Target }
 ];
 
 const FilterButtons: React.FC<FilterButtonsProps> = ({ activeSection, setActiveSection }) => {
