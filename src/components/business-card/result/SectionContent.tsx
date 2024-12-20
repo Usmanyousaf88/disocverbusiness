@@ -14,13 +14,18 @@ const SectionContent: React.FC<SectionContentProps> = ({ content }) => {
 
   return (
     <>
-      {formattedContent.map((line, i) => (
-        <ContentLine
-          key={i}
-          line={line}
-          isTitle={i === 0 || line.match(/^[A-Z][A-Za-z\s]+$/)}
-        />
-      ))}
+      {formattedContent.map((line, i) => {
+        // Check if the line matches the title pattern (all caps words)
+        const isTitle = i === 0 || Boolean(line.match(/^[A-Z][A-Za-z\s]+$/));
+        
+        return (
+          <ContentLine
+            key={i}
+            line={line}
+            isTitle={isTitle}
+          />
+        );
+      })}
     </>
   );
 };
