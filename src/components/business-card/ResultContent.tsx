@@ -46,13 +46,13 @@ const ResultContent: React.FC<ResultContentProps> = ({ content, activeSection })
           // Convert bullet points into conversational paragraphs
           const conversationalLine = line
             .replace(/^([A-Za-z\s]+):/, (match) => `🎯 Let's talk about ${match.slice(0, -1)}: `)
-            .replace(/requirements/gi, 'things we'll need')
-            .replace(/implementation/gi, 'putting it into action')
-            .replace(/infrastructure/gi, 'technical foundation')
-            .replace(/monetization/gi, 'making money')
-            .replace(/strategy/gi, 'plan')
-            .replace(/metrics/gi, 'measures of success')
-            .replace(/KPIs/gi, 'key success indicators');
+            .replace(/requirements/gi, "things we need")
+            .replace(/implementation/gi, "putting it into action")
+            .replace(/infrastructure/gi, "technical foundation")
+            .replace(/monetization/gi, "making money")
+            .replace(/strategy/gi, "plan")
+            .replace(/metrics/gi, "measures of success")
+            .replace(/KPIs/gi, "key success indicators");
 
           return (
             <p key={i} className="mb-4 leading-relaxed text-gray-700">
@@ -63,16 +63,16 @@ const ResultContent: React.FC<ResultContentProps> = ({ content, activeSection })
 
       const sectionTitle = title.replace(':', '');
       const introText = {
-        'Product Development': "Let's explore how we'll build your product...",
+        'Product Development': "Let's explore how we can build your product...",
         'Market Validation': "Here's what we know about your potential customers...",
-        'Monetization Strategy': "Now, let's talk about how you'll make money...",
-        'Technical Infrastructure': "Here's the technology foundation you'll need...",
+        'Monetization Strategy': "Now, let's talk about how you can make money...",
+        'Technical Infrastructure': "Here's the technology foundation you need...",
         'Go-to-Market Strategy': "Let's plan how to launch your product...",
-        'Business Operations': "Here's how you'll run your business day-to-day...",
+        'Business Operations': "Here's how you can run your business day-to-day...",
         'Legal and Compliance': "Important legal stuff to keep in mind...",
         'Financial Planning': "Let's talk about the money side of things...",
-        'Growth Strategy': "Here's how we'll help your business grow...",
-        'Success Metrics': "Here's how we'll measure your success..."
+        'Growth Strategy': "Here's how we can help your business grow...",
+        'Success Metrics': "Here's how we can measure your success..."
       }[sectionTitle] || "Let's dive into the details...";
 
       return (
