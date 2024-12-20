@@ -38,14 +38,14 @@ const ResultContent: React.FC<ResultContentProps> = ({ content, activeSection })
       const [title, ...content] = section.split('\n');
       const formattedContent = content
         .join('\n')
-        .replace(/^\d\.\s/gm, '')
-        .replace(/•\s/gm, '')
+        .replace(/^(\d\.|\•)\s/gm, '') // Remove bullet points and numbers
         .split('\n')
         .filter(line => line.trim())
         .map((line, i) => {
-          // Convert bullet points into conversational paragraphs
-          const conversationalLine = line
-            .replace(/^([A-Za-z\s]+):/, (match) => `🎯 Let's talk about ${match.slice(0, -1)}: `)
+          // Format each line to remove bold tags and create a more natural flow
+          const processedLine = line
+            .replace(/<\/?b>/g, '') // Remove any <b> tags
+            .replace(/^([A-Za-z\s]+):/, (match) => `${match.slice(0, -1)}`) // Remove the colon after titles
             .replace(/requirements/gi, "things we need")
             .replace(/implementation/gi, "putting it into action")
             .replace(/infrastructure/gi, "technical foundation")
@@ -54,9 +54,18 @@ const ResultContent: React.FC<ResultContentProps> = ({ content, activeSection })
             .replace(/metrics/gi, "measures of success")
             .replace(/KPIs/gi, "key success indicators");
 
+          // If this is a section title (first line of a group)
+          if (i === 0 || line.match(/^[A-Z][A-Za-z\s]+$/)) {
+            return (
+              <h5 key={`title-${i}`} className="text-xl font-semibold text-primary mt-6 mb-2">
+                {processedLine}
+              </h5>
+            );
+          }
+
           return (
             <p key={i} className="mb-4 leading-relaxed text-gray-700">
-              {conversationalLine}
+              {processedLine}
             </p>
           );
         });
@@ -80,9 +89,9 @@ const ResultContent: React.FC<ResultContentProps> = ({ content, activeSection })
           key={index} 
           className="mb-6 p-6 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeIn"
         >
-          <h4 className="text-2xl font-semibold text-primary mb-4">{sectionTitle}</h4>
+          <h4 className="text-2xl font-semibold text-primary mb-2">{sectionTitle}</h4>
           <p className="text-lg text-gray-600 italic mb-6">{introText}</p>
-          <div className="space-y-4 prose prose-lg">
+          <div className="space-y-2 prose prose-lg">
             {formattedContent}
           </div>
         </Card>
