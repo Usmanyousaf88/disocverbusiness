@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { Card } from "@/components/ui/card";
+import { ArrowDownCircle, Lightbulb, Target, Building2 } from "lucide-react";
 
 interface BusinessIdeaCardProps {
   idea: string;
@@ -39,18 +41,36 @@ const BusinessIdeaCard = ({ idea, index, apiKey }: BusinessIdeaCardProps) => {
           const [header, ...content] = section.split(':');
           if (header && content) {
             if (header.trim() === 'Name') {
-              return `<div class="text-2xl font-bold mb-2 text-primary">${content.join(':').trim()}</div>`;
+              return `<div class="text-3xl font-bold mb-4 text-primary bg-primary/5 p-4 rounded-lg">${content.join(':').trim()}</div>`;
             } else if (header.trim() === 'Example business or person') {
-              return `<div class="text-sm text-gray-600 italic mb-4">Similar to: ${content.join(':').trim()}</div>`;
+              return `<div class="flex items-center gap-2 text-sm text-gray-600 italic mb-6">
+                        <Building2 className="w-4 h-4" />
+                        Similar to: ${content.join(':').trim()}
+                      </div>`;
             }
           }
           return section;
         });
 
-      return formattedSections.join('\n');
+      return `
+        <div class="flex items-start gap-3 mb-6">
+          <Lightbulb class="w-6 h-6 text-primary mt-1" />
+          <div class="text-lg leading-relaxed text-gray-700">${mainIdea}</div>
+        </div>
+        ${formattedSections.join('\n')}
+      `;
     }
 
     return formattedText;
+  };
+
+  const formatDeepDiveResponse = (response: string): string => {
+    // Replace numbered lists with icons and better formatting
+    return response.replace(/^\d\.\s/gm, '• ') // Replace numbers with bullets
+      .replace(/^(Business names:|First steps:|Find clients:|Offer ideas:|Practice:)/gm, 
+        '<div class="text-xl font-semibold text-primary mt-6 mb-3">$1</div>')
+      .replace(/^•\s(.+)$/gm, 
+        '<div class="flex items-center gap-2 mb-2"><Target class="w-4 h-4 text-primary" /><span>$1</span></div>');
   };
 
   const handleDiveDeeper = async () => {
@@ -59,14 +79,24 @@ const BusinessIdeaCard = ({ idea, index, apiKey }: BusinessIdeaCardProps) => {
       const prompt = `This is my business idea to follow my passions and provide value for others so i can make an income:
 ${idea}
 
-Please analyze the internet if there is potential for this idea to work. based on the analisis, give me a reasoned reaction in 3 sentences and then provide me with the following:
-1. 5 nice business names for this plan
-2. The first 5 simple steps i need to take to start with this plan
-3. Where i can find my first 5 clients
-4. 5 great idea's for offers to get my first clients
-5. How can i practice this cheap and easy to see if it is a good fit for me
+Please analyze the internet if there is potential for this idea to work. based on the analysis, give me a reasoned reaction in 3 sentences and then provide me with the following:
 
-Please return only the requested information properly formatted with good readability`;
+Business names:
+• 5 catchy and memorable business names for this plan
+
+First steps:
+• The first 5 simple steps to start this business
+
+Find clients:
+• 5 effective ways to find your first clients
+
+Offer ideas:
+• 5 compelling offers to attract initial clients
+
+Practice:
+• 5 low-cost ways to test and validate this idea
+
+Please format the response clearly with these exact headings and bullet points.`;
 
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -97,7 +127,7 @@ Please return only the requested information properly formatted with good readab
 
       toast({
         title: "Deep dive analysis complete",
-        description: "Scroll down to see the detailed information",
+        description: "Scroll down to see your personalized business roadmap",
       });
     } catch (error) {
       toast({
@@ -111,40 +141,45 @@ Please return only the requested information properly formatted with good readab
   };
 
   return (
-    <div 
-      className={`rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl ${getGradientClass(index)}`}
-    >
-      <div className="p-6">
+    <Card className={`overflow-hidden transition-all duration-300 hover:shadow-xl ${getGradientClass(index)}`}>
+      <div className="p-8">
         <div 
-          className="prose max-w-none"
+          className="prose prose-lg max-w-none"
           dangerouslySetInnerHTML={{ 
             __html: formatText(idea)
           }}
         />
         
-        <div className="mt-6 pt-4 border-t border-gray-200">
+        <div className="mt-8 flex justify-center">
           <Button
             onClick={handleDiveDeeper}
             disabled={loadingDeepDive}
-            className="bg-primary hover:bg-primary-hover text-white transition-colors duration-300"
+            className="bg-primary hover:bg-primary-hover text-white transition-colors duration-300 flex items-center gap-2 text-lg px-6 py-6 rounded-xl"
           >
-            {loadingDeepDive ? "Analyzing..." : "Dive deeper"}
+            {loadingDeepDive ? (
+              <>Analyzing...</>
+            ) : (
+              <>
+                <ArrowDownCircle className="w-5 h-5" />
+                Get Your Business Roadmap
+              </>
+            )}
           </Button>
         </div>
 
         {deepDiveResponse && !loadingDeepDive && (
-          <div className="mt-6 p-4 bg-white/50 backdrop-blur-sm rounded-lg shadow-inner">
-            <h4 className="text-lg font-semibold text-primary mb-3">Detailed Analysis:</h4>
+          <div className="mt-8 p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-inner">
+            <h4 className="text-2xl font-semibold text-primary mb-6">Your Business Roadmap:</h4>
             <div 
-              className="prose prose-sm max-w-none"
+              className="prose prose-lg max-w-none space-y-4"
               dangerouslySetInnerHTML={{ 
-                __html: formatText(deepDiveResponse)
+                __html: formatDeepDiveResponse(deepDiveResponse)
               }}
             />
           </div>
         )}
       </div>
-    </div>
+    </Card>
   );
 };
 
