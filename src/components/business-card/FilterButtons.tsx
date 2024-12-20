@@ -4,12 +4,12 @@ import {
   Target, 
   ChartPieIcon,
   Users,
-  BookOpen,
-  TrendingUp,
   Wallet,
   Settings,
   Megaphone,
-  Network
+  Network,
+  BookOpen,
+  TrendingUp
 } from "lucide-react";
 
 export type ResultSection = 
@@ -24,6 +24,11 @@ export type ResultSection =
   | 'financial'
   | 'growth'
   | 'metrics';
+
+interface FilterButtonsProps {
+  activeSection: ResultSection;
+  setActiveSection: (section: ResultSection) => void;
+}
 
 export const filterButtons = [
   { id: 'all' as const, label: 'All Results', icon: Target },
