@@ -1,7 +1,9 @@
 import React from 'react';
-import { Target } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { type ResultSection } from './FilterButtons';
+import SectionCard from './result/SectionCard';
+import SectionContent from './result/SectionContent';
+import { filterContent } from './result/filterContent';
+import { getIntroText } from './result/getIntroText';
 
 interface ResultContentProps {
   content: string | null;
@@ -9,26 +11,6 @@ interface ResultContentProps {
 }
 
 const ResultContent: React.FC<ResultContentProps> = ({ content, activeSection }) => {
-  const filterContent = (content: string | null, section: ResultSection): string => {
-    if (!content) return '';
-    
-    const sections: Record<ResultSection, string> = {
-      'all': content,
-      'product-development': content.split('Market Validation:')[0],
-      'market-validation': content.split('Market Validation:')[1]?.split('Monetization Strategy:')[0] || '',
-      'monetization': content.split('Monetization Strategy:')[1]?.split('Technical Infrastructure:')[0] || '',
-      'technical': content.split('Technical Infrastructure:')[1]?.split('Go-to-Market Strategy:')[0] || '',
-      'go-to-market': content.split('Go-to-Market Strategy:')[1]?.split('Business Operations:')[0] || '',
-      'operations': content.split('Business Operations:')[1]?.split('Legal and Compliance:')[0] || '',
-      'legal': content.split('Legal and Compliance:')[1]?.split('Financial Planning:')[0] || '',
-      'financial': content.split('Financial Planning:')[1]?.split('Growth Strategy:')[0] || '',
-      'growth': content.split('Growth Strategy:')[1]?.split('Success Metrics:')[0] || '',
-      'metrics': content.split('Success Metrics:')[1] || ''
-    };
-    
-    return sections[section] || '';
-  };
-
   const formatDeepDiveResponse = (response: string): JSX.Element[] => {
     const sections = response
       .split(/(?=Product Development:|Market Validation:|Monetization Strategy:|Technical Infrastructure:|Go-to-Market Strategy:|Business Operations:|Legal and Compliance:|Financial Planning:|Growth Strategy:|Success Metrics:)/g)
@@ -36,65 +18,17 @@ const ResultContent: React.FC<ResultContentProps> = ({ content, activeSection })
 
     return sections.map((section, index) => {
       const [title, ...content] = section.split('\n');
-      const formattedContent = content
-        .join('\n')
-        .replace(/^(\d\.|\•)\s/gm, '') // Remove bullet points and numbers
-        .split('\n')
-        .filter(line => line.trim())
-        .map((line, i) => {
-          // Format each line to remove bold tags and create a more natural flow
-          const processedLine = line
-            .replace(/<\/?b>/g, '') // Remove any <b> tags
-            .replace(/^([A-Za-z\s]+):/, (match) => `${match.slice(0, -1)}`) // Remove the colon after titles
-            .replace(/requirements/gi, "things we need")
-            .replace(/implementation/gi, "putting it into action")
-            .replace(/infrastructure/gi, "technical foundation")
-            .replace(/monetization/gi, "making money")
-            .replace(/strategy/gi, "plan")
-            .replace(/metrics/gi, "measures of success")
-            .replace(/KPIs/gi, "key success indicators");
-
-          // If this is a section title (first line of a group)
-          if (i === 0 || line.match(/^[A-Z][A-Za-z\s]+$/)) {
-            return (
-              <h5 key={`title-${i}`} className="text-xl font-semibold text-primary mt-6 mb-2">
-                {processedLine}
-              </h5>
-            );
-          }
-
-          return (
-            <p key={i} className="mb-4 leading-relaxed text-gray-700">
-              {processedLine}
-            </p>
-          );
-        });
-
       const sectionTitle = title.replace(':', '');
-      const introText = {
-        'Product Development': "Let's explore how we can build your product...",
-        'Market Validation': "Here's what we know about your potential customers...",
-        'Monetization Strategy': "Now, let's talk about how you can make money...",
-        'Technical Infrastructure': "Here's the technology foundation you need...",
-        'Go-to-Market Strategy': "Let's plan how to launch your product...",
-        'Business Operations': "Here's how you can run your business day-to-day...",
-        'Legal and Compliance': "Important legal stuff to keep in mind...",
-        'Financial Planning': "Let's talk about the money side of things...",
-        'Growth Strategy': "Here's how we can help your business grow...",
-        'Success Metrics': "Here's how we can measure your success..."
-      }[sectionTitle] || "Let's dive into the details...";
+      const introText = getIntroText(sectionTitle);
 
       return (
-        <Card 
-          key={index} 
-          className="mb-6 p-6 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeIn"
+        <SectionCard 
+          key={index}
+          title={sectionTitle}
+          introText={introText}
         >
-          <h4 className="text-2xl font-semibold text-primary mb-2">{sectionTitle}</h4>
-          <p className="text-lg text-gray-600 italic mb-6">{introText}</p>
-          <div className="space-y-2 prose prose-lg">
-            {formattedContent}
-          </div>
-        </Card>
+          <SectionContent content={content} />
+        </SectionCard>
       );
     });
   };
