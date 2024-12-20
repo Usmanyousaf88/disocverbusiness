@@ -2,24 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
-import {
-  ArrowDownCircle, Lightbulb, Target, Building2,
-  ChartPie, Award, Link, Users, DollarSign,
-  Calendar, Megaphone, ShieldAlert, BookOpen,
-  ChartBar, TrendingUp, Clock, AlertOctagon, Handshake
-} from "lucide-react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell
-} from 'recharts';
+import { ArrowDownCircle, Lightbulb, Target, Building2 } from "lucide-react";
 
 interface BusinessIdeaCardProps {
   idea: string;
@@ -31,20 +14,6 @@ const BusinessIdeaCard = ({ idea, index, apiKey }: BusinessIdeaCardProps) => {
   const [loadingDeepDive, setLoadingDeepDive] = useState(false);
   const [deepDiveResponse, setDeepDiveResponse] = useState<string | null>(null);
   const { toast } = useToast();
-
-  // Sample data for charts
-  const revenueData = [
-    { name: 'Year 1', value: 30 },
-    { name: 'Year 2', value: 60 },
-    { name: 'Year 3', value: 100 }
-  ];
-
-  const marketShareData = [
-    { name: 'Your Business', value: 30 },
-    { name: 'Competitors', value: 70 }
-  ];
-
-  const COLORS = ['#8B5CF6', '#C4B5FD'];
 
   const getGradientClass = (index: number): string => {
     const gradients = [
@@ -61,6 +30,7 @@ const BusinessIdeaCard = ({ idea, index, apiKey }: BusinessIdeaCardProps) => {
     let formattedText = text.replace(/Business Idea:/g, '');
     formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     
+    // Split by sections
     const sections = formattedText.split(/(?=\n(?:Name:|Example business or person:))/g);
     
     if (sections.length > 1) {
@@ -74,7 +44,7 @@ const BusinessIdeaCard = ({ idea, index, apiKey }: BusinessIdeaCardProps) => {
               return `<div class="text-3xl font-bold mb-4 text-primary bg-primary/5 p-4 rounded-lg">${content.join(':').trim()}</div>`;
             } else if (header.trim() === 'Example business or person') {
               return `<div class="flex items-center gap-2 text-sm text-gray-600 italic mb-6">
-                        <Building2 class="w-4 h-4" />
+                        <Building2 className="w-4 h-4" />
                         Similar to: ${content.join(':').trim()}
                       </div>`;
             }
@@ -95,7 +65,8 @@ const BusinessIdeaCard = ({ idea, index, apiKey }: BusinessIdeaCardProps) => {
   };
 
   const formatDeepDiveResponse = (response: string): string => {
-    return response.replace(/^\d\.\s/gm, '• ')
+    // Replace numbered lists with icons and better formatting
+    return response.replace(/^\d\.\s/gm, '• ') // Replace numbers with bullets
       .replace(/^(Business names:|First steps:|Find clients:|Offer ideas:|Practice:)/gm, 
         '<div class="text-xl font-semibold text-primary mt-6 mb-3">$1</div>')
       .replace(/^•\s(.+)$/gm, 
@@ -108,60 +79,22 @@ const BusinessIdeaCard = ({ idea, index, apiKey }: BusinessIdeaCardProps) => {
       const prompt = `This is my business idea to follow my passions and provide value for others so i can make an income:
 ${idea}
 
-Please provide a comprehensive analysis including:
+Please analyze the internet if there is potential for this idea to work. based on the analysis, give me a reasoned reaction in 3 sentences and then provide me with the following:
 
-1. Initial Analysis:
-- A reasoned reaction in 3 sentences
-- 5 catchy business names
-- First 5 steps to start
-- 5 ways to find clients
-- 5 compelling offers
-- 5 validation methods
+Business names:
+• 5 catchy and memorable business names for this plan
 
-2. Business Model:
-- Revenue streams
-- Startup costs
-- Market size estimation
+First steps:
+• The first 5 simple steps to start this business
 
-3. Success Stories:
-- 3 similar success stories
-- Key success factors
-- Common challenges overcome
+Find clients:
+• 5 effective ways to find your first clients
 
-4. Market Analysis:
-- Target audience demographics
-- Main competitors
-- Current market trends
+Offer ideas:
+• 5 compelling offers to attract initial clients
 
-5. Financial Projections:
-- First year cost breakdown
-- Revenue potential
-- Break-even timeline
-
-6. Implementation Timeline:
-- 30/60/90 day plan
-- Key milestones
-- Success metrics
-
-7. Marketing Strategy:
-- Recommended channels
-- Content ideas
-- Customer acquisition methods
-
-8. Risk Assessment:
-- Potential challenges
-- Regulatory considerations
-- Mitigation strategies
-
-9. Networking Opportunities:
-- Industry events
-- Professional associations
-- Online communities
-
-10. Learning Resources:
-- Recommended courses
-- Essential books
-- Industry certifications
+Practice:
+• 5 low-cost ways to test and validate this idea
 
 Please format the response clearly with these exact headings and bullet points.`;
 
@@ -194,7 +127,7 @@ Please format the response clearly with these exact headings and bullet points.`
 
       toast({
         title: "Deep dive analysis complete",
-        description: "Scroll down to see your comprehensive business analysis",
+        description: "Scroll down to see your personalized business roadmap",
       });
     } catch (error) {
       toast({
@@ -206,18 +139,6 @@ Please format the response clearly with these exact headings and bullet points.`
       setLoadingDeepDive(false);
     }
   };
-
-  const renderSection = (title: string, icon: React.ReactNode, content: string) => (
-    <div className="mb-8 bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-2 mb-4">
-        {icon}
-        <h3 className="text-xl font-semibold text-primary">{title}</h3>
-      </div>
-      <div className="prose prose-lg max-w-none"
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
-    </div>
-  );
 
   return (
     <Card className={`overflow-hidden transition-all duration-300 hover:shadow-xl ${getGradientClass(index)}`}>
@@ -240,88 +161,21 @@ Please format the response clearly with these exact headings and bullet points.`
             ) : (
               <>
                 <ArrowDownCircle className="w-5 h-5" />
-                Get Your Complete Business Analysis
+                Get Your Business Roadmap
               </>
             )}
           </Button>
         </div>
 
         {deepDiveResponse && !loadingDeepDive && (
-          <div className="mt-8 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm">
-                <h4 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
-                  <ChartPie className="w-5 h-5" />
-                  Revenue Projection
-                </h4>
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={revenueData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Area type="monotone" dataKey="value" stroke="#8B5CF6" fill="#C4B5FD" />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-              
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm">
-                <h4 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
-                  <ChartPie className="w-5 h-5" />
-                  Market Share Potential
-                </h4>
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={marketShareData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={80}
-                        fill="#8B5CF6"
-                        dataKey="value"
-                        label
-                      >
-                        {marketShareData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
-
-            {renderSection("Business Model", <ChartPie className="w-6 h-6 text-primary" />, 
-              deepDiveResponse.match(/Business Model:[\s\S]*?(?=Success Stories:)/)?.[0] || '')}
-            
-            {renderSection("Success Stories", <Award className="w-6 h-6 text-primary" />,
-              deepDiveResponse.match(/Success Stories:[\s\S]*?(?=Market Analysis:)/)?.[0] || '')}
-            
-            {renderSection("Market Analysis", <Users className="w-6 h-6 text-primary" />,
-              deepDiveResponse.match(/Market Analysis:[\s\S]*?(?=Financial Projections:)/)?.[0] || '')}
-            
-            {renderSection("Financial Projections", <DollarSign className="w-6 h-6 text-primary" />,
-              deepDiveResponse.match(/Financial Projections:[\s\S]*?(?=Implementation Timeline:)/)?.[0] || '')}
-            
-            {renderSection("Implementation Timeline", <Calendar className="w-6 h-6 text-primary" />,
-              deepDiveResponse.match(/Implementation Timeline:[\s\S]*?(?=Marketing Strategy:)/)?.[0] || '')}
-            
-            {renderSection("Marketing Strategy", <Megaphone className="w-6 h-6 text-primary" />,
-              deepDiveResponse.match(/Marketing Strategy:[\s\S]*?(?=Risk Assessment:)/)?.[0] || '')}
-            
-            {renderSection("Risk Assessment", <ShieldAlert className="w-6 h-6 text-primary" />,
-              deepDiveResponse.match(/Risk Assessment:[\s\S]*?(?=Networking Opportunities:)/)?.[0] || '')}
-            
-            {renderSection("Networking Opportunities", <Handshake className="w-6 h-6 text-primary" />,
-              deepDiveResponse.match(/Networking Opportunities:[\s\S]*?(?=Learning Resources:)/)?.[0] || '')}
-            
-            {renderSection("Learning Resources", <BookOpen className="w-6 h-6 text-primary" />,
-              deepDiveResponse.match(/Learning Resources:[\s\S]*$/)?.[0] || '')}
+          <div className="mt-8 p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-inner">
+            <h4 className="text-2xl font-semibold text-primary mb-6">Your Business Roadmap:</h4>
+            <div 
+              className="prose prose-lg max-w-none space-y-4"
+              dangerouslySetInnerHTML={{ 
+                __html: formatDeepDiveResponse(deepDiveResponse)
+              }}
+            />
           </div>
         )}
       </div>
