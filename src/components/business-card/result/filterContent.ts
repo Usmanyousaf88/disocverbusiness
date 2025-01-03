@@ -1,21 +1,30 @@
-import { type ResultSection } from '../FilterButtons';
-
-export const filterContent = (content: string | null, section: ResultSection): string => {
+export const filterContent = (content: string | null, activeSection: string): string => {
   if (!content) return '';
-  
-  const sections: Record<ResultSection, string> = {
-    'all': content,
-    'product-development': content.split('Market Validation:')[0],
-    'market-validation': content.split('Market Validation:')[1]?.split('Monetization Strategy:')[0] || '',
-    'monetization': content.split('Monetization Strategy:')[1]?.split('Technical Infrastructure:')[0] || '',
-    'technical': content.split('Technical Infrastructure:')[1]?.split('Go-to-Market Strategy:')[0] || '',
-    'go-to-market': content.split('Go-to-Market Strategy:')[1]?.split('Business Operations:')[0] || '',
-    'operations': content.split('Business Operations:')[1]?.split('Legal and Compliance:')[0] || '',
-    'legal': content.split('Legal and Compliance:')[1]?.split('Financial Planning:')[0] || '',
-    'financial': content.split('Financial Planning:')[1]?.split('Growth Strategy:')[0] || '',
-    'growth': content.split('Growth Strategy:')[1]?.split('Success Metrics:')[0] || '',
-    'metrics': content.split('Success Metrics:')[1] || ''
+
+  // If showing all sections, return the complete content
+  if (activeSection === 'all') {
+    return content;
+  }
+
+  // Extract the relevant section based on activeSection
+  const sections = {
+    'product': ['Product Development', 'Technical Requirements', 'Development Timeline'],
+    'market': ['Market Validation', 'Market Analysis', 'Target Market'],
+    'monetization': ['Monetization', 'Revenue Streams', 'Financial Projections'],
+    'operations': ['Operations', 'Business Operations', 'Operational Requirements'],
+    'growth': ['Growth Strategy', 'Growth Path', 'Scaling Strategy']
   };
+
+  const relevantKeywords = sections[activeSection as keyof typeof sections] || [];
   
-  return sections[section] || '';
+  // Split content into sections and find matching ones
+  const contentSections = content.split(/(?=\n[A-Z][^a-z\n:]+:)/);
+  
+  const matchingSections = contentSections.filter(section =>
+    relevantKeywords.some(keyword => 
+      section.toLowerCase().includes(keyword.toLowerCase())
+    )
+  );
+
+  return matchingSections.join('\n\n') || 'No specific information available for this section.';
 };

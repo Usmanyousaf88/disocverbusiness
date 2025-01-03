@@ -8,16 +8,14 @@ interface SectionContentProps {
 const SectionContent: React.FC<SectionContentProps> = ({ content }) => {
   const formattedContent = content
     .join('\n')
-    .replace(/^(\d\.|\•)\s/gm, '')
     .split('\n')
-    .filter(line => line.trim());
+    .filter(line => line.trim())
+    .map(line => line.replace(/^(\d\.|\•)\s/, ''));
 
   return (
-    <>
+    <div className="space-y-4">
       {formattedContent.map((line, i) => {
-        // Check if the line matches the title pattern (all caps words)
-        const isTitle = i === 0 || Boolean(line.match(/^[A-Z][A-Za-z\s]+$/));
-        
+        const isTitle = i === 0 || /^[A-Z][A-Z\s]+:/.test(line);
         return (
           <ContentLine
             key={i}
@@ -26,7 +24,7 @@ const SectionContent: React.FC<SectionContentProps> = ({ content }) => {
           />
         );
       })}
-    </>
+    </div>
   );
 };
 

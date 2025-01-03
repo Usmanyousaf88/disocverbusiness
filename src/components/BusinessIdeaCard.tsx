@@ -58,6 +58,7 @@ const BusinessIdeaCard = ({ idea, index, straicoKey }: BusinessIdeaCardProps) =>
   const handleDiveDeeper = async () => {
     setLoadingDeepDive(true);
     try {
+      console.log('Starting deep dive analysis...');
       const prompt = {
         sections: {
           productDevelopment: `Analyze this business idea and provide detailed insights on product development (min 500 words):
@@ -112,7 +113,7 @@ Include:
         }
       };
 
-      console.log('Sending analysis request to Straico API');
+      console.log('Sending analysis request to Straico API with prompt:', prompt);
       const response = await fetch('https://api.straico.com/v0/rag/prompt', {
         method: 'POST',
         headers: {
@@ -122,7 +123,7 @@ Include:
         body: JSON.stringify({
           prompt: JSON.stringify(prompt),
           model: "anthropic/claude-3.5-sonnet",
-          max_tokens: 4000 // Increased token limit for more detailed responses
+          max_tokens: 4000
         }),
       });
 
@@ -132,13 +133,16 @@ Include:
 
       const data = await response.json();
       console.log('Received analysis response:', data);
-      const deepDiveResponse = data.response.answer;
-      setDeepDiveResponse(deepDiveResponse);
-
-      toast({
-        title: "Analysis Complete",
-        description: "Your comprehensive business roadmap is ready to explore",
-      });
+      
+      if (data.response?.answer) {
+        setDeepDiveResponse(data.response.answer);
+        toast({
+          title: "Analysis Complete",
+          description: "Your comprehensive business roadmap is ready to explore",
+        });
+      } else {
+        throw new Error('Invalid response format from API');
+      }
     } catch (error) {
       console.error('Analysis error:', error);
       toast({
@@ -151,8 +155,20 @@ Include:
     }
   };
 
+  // Validate sections before rendering
+  useEffect(() => {
+    const hasAllSections = Object.values(sections).every(section => {
+      const content = section.trim();
+      console.log('Validating section content:', content ? 'Has content' : 'Empty');
+      return content.length > 0;
+    });
+    console.log('All sections validation result:', hasAllSections);
+    setIsReady(hasAllSections);
+  }, [sections]);
+
   if (!isReady) {
-    return null; // Don't render the card until all sections are properly loaded
+    console.log('Card not ready - missing section content');
+    return null;
   }
 
   return (
@@ -233,10 +249,12 @@ Include:
                 activeSection={activeSection}
                 setActiveSection={setActiveSection}
               />
-              <ResultContent 
-                content={deepDiveResponse}
-                activeSection={activeSection}
-              />
+              <div className="mt-4 bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-lg">
+                <ResultContent 
+                  content={deepDiveResponse.split('\n')}
+                  activeSection={activeSection}
+                />
+              </div>
             </div>
           )}
         </div>
