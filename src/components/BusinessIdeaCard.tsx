@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
-import { ArrowDownCircle } from "lucide-react";
+import { ArrowDownCircle, Sparkles } from "lucide-react";
 import FilterButtons, { type ResultSection } from "./business-card/FilterButtons";
 import ResultContent from "./business-card/ResultContent";
 import BusinessIdeaHeader from "./business-card/BusinessIdeaHeader";
@@ -33,72 +33,54 @@ const BusinessIdeaCard = ({ idea, index, straicoKey }: BusinessIdeaCardProps) =>
   const handleDiveDeeper = async () => {
     setLoadingDeepDive(true);
     try {
-      const prompt = `This is my business idea to follow my passions and provide value for others so i can make an income:
+      const prompt = {
+        sections: {
+          productDevelopment: `Analyze the following business idea and provide key insights on product development:
 ${idea}
 
-Please analyze this business idea and provide a comprehensive breakdown including:
+Focus on:
+1. Core features and unique value proposition
+2. Technical requirements and implementation
+3. Development timeline and key milestones
+4. MVP scope and initial features`,
 
-Product Development:
-• Core features and functionalities
-• Technical requirements and stack
-• Development timeline and milestones
-• MVP (Minimum Viable Product) scope
+          marketValidation: `For this business idea:
+${idea}
 
-Market Validation:
-• Target market size and demographics
-• Customer pain points and needs
-• Market gaps and opportunities
-• Competitive advantage analysis
+Provide market analysis covering:
+1. Target market size and demographics
+2. Customer pain points and needs
+3. Market opportunities and gaps
+4. Competitive landscape analysis`,
 
-Monetization Strategy:
-• Pricing models and tiers
-• Revenue streams breakdown
-• Subscription vs one-time payment analysis
-• Potential upsell opportunities
+          monetization: `Based on this business concept:
+${idea}
 
-Technical Infrastructure:
-• Required technology stack
-• Hosting and deployment needs
-• Scalability considerations
-• Security requirements
+Detail the monetization approach:
+1. Primary revenue streams
+2. Pricing strategy and models
+3. Customer acquisition costs
+4. Potential upsell opportunities`,
 
-Go-to-Market Strategy:
-• Launch strategy and timeline
-• Marketing channels and tactics
-• Customer acquisition strategy
-• Growth hacking opportunities
+          operations: `For implementing this business:
+${idea}
 
-Business Operations:
-• Team structure and roles
-• Required skills and expertise
-• Operational processes
-• Quality assurance measures
+Outline operational requirements:
+1. Team structure and key roles
+2. Required resources and tools
+3. Core processes and workflows
+4. Quality assurance measures`,
 
-Legal and Compliance:
-• Required licenses and permits
-• Data protection requirements
-• Terms of service considerations
-• Intellectual property protection
+          growth: `To scale this business idea:
+${idea}
 
-Financial Planning:
-• Initial investment required
-• Operating costs breakdown
-• Revenue projections
-• Break-even analysis
-
-Growth Strategy:
-• Scaling roadmap
-• Partnership opportunities
-• Market expansion plans
-• Future feature roadmap
-
-Success Metrics:
-• Key Performance Indicators (KPIs)
-• Customer success metrics
-• Financial metrics
-• Growth metrics
-
-Please format the response clearly with these exact headings and bullet points.`;
+Provide growth strategies covering:
+1. Expansion roadmap
+2. Partnership opportunities
+3. Market penetration tactics
+4. Future development plans`
+        }
+      };
 
       const response = await fetch('https://api.straico.com/v0/rag/prompt', {
         method: 'POST',
@@ -107,7 +89,7 @@ Please format the response clearly with these exact headings and bullet points.`
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          prompt: prompt,
+          prompt: JSON.stringify(prompt),
           model: "anthropic/claude-3.5-sonnet"
         }),
       });
@@ -121,13 +103,13 @@ Please format the response clearly with these exact headings and bullet points.`
       setDeepDiveResponse(deepDiveResponse);
 
       toast({
-        title: "Deep dive analysis complete",
-        description: "Scroll down to see your personalized business roadmap",
+        title: "Analysis Complete",
+        description: "Your business roadmap is ready to explore",
       });
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to generate deep dive analysis. Please try again.",
+        description: "Failed to generate analysis. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -147,11 +129,14 @@ Please format the response clearly with these exact headings and bullet points.`
             className="bg-primary hover:bg-primary-hover text-white transition-colors duration-300 flex items-center gap-2 text-lg px-6 py-6 rounded-xl"
           >
             {loadingDeepDive ? (
-              <>Analyzing...</>
+              <>
+                <Sparkles className="w-5 h-5 animate-spin" />
+                Analyzing Your Idea...
+              </>
             ) : (
               <>
                 <ArrowDownCircle className="w-5 h-5" />
-                Get Your Business Roadmap
+                Generate Business Roadmap
               </>
             )}
           </Button>

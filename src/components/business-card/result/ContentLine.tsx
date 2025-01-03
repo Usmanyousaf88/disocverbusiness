@@ -1,4 +1,5 @@
 import React from 'react';
+import { Check } from 'lucide-react';
 
 interface ContentLineProps {
   line: string;
@@ -6,33 +7,19 @@ interface ContentLineProps {
 }
 
 const ContentLine: React.FC<ContentLineProps> = ({ line, isTitle }) => {
-  const processLine = (text: string): string => {
-    return text
-      .replace(/<\/?b>/g, '')
-      .replace(/^([A-Za-z\s]+):/, (match) => `${match.slice(0, -1)}`)
-      .replace(/requirements/gi, "things we need")
-      .replace(/implementation/gi, "putting it into action")
-      .replace(/infrastructure/gi, "technical foundation")
-      .replace(/monetization/gi, "making money")
-      .replace(/strategy/gi, "plan")
-      .replace(/metrics/gi, "measures of success")
-      .replace(/KPIs/gi, "key success indicators");
-  };
-
-  const processedLine = processLine(line);
-
   if (isTitle) {
     return (
-      <h5 className="text-xl font-semibold text-primary mt-6 mb-2">
-        {processedLine}
+      <h5 className="text-lg font-semibold text-primary mt-4 mb-2">
+        {line}
       </h5>
     );
   }
 
   return (
-    <p className="mb-4 leading-relaxed text-gray-700">
-      {processedLine}
-    </p>
+    <div className="flex items-start gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors">
+      <Check className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
+      <p className="text-gray-700 leading-relaxed">{line}</p>
+    </div>
   );
 };
 
