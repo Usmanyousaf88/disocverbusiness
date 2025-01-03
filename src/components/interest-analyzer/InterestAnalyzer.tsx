@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from "@/components/ui/use-toast";
-import { type Toast } from "@/components/ui/toast";
+import { type ToastProps } from "@/components/ui/toast";
 import InterestSelector from "@/components/InterestSelector";
 import AnalysisButton from "@/components/AnalysisButton";
 import { generateCombinations, generatePrompt } from "@/utils/combinationGenerator";
@@ -16,7 +16,7 @@ interface InterestAnalyzerProps {
   toast: {
     (...props: any[]): void;
     dismiss: (toastId?: string) => void;
-  } & Toast;
+  } & ToastProps;
 }
 
 const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
