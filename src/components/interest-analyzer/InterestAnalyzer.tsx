@@ -25,7 +25,7 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
   isInterestSelectorCollapsed,
 }) => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
-  const [selectedModels, setSelectedModels] = useState<string[]>(["anthropic/claude-3-haiku:beta"]);
+  const [selectedModels, setSelectedModels] = useState<string[]>([]);
 
   const getInterestName = (id: string): string => {
     const interest = InterestSelector.predefinedInterests?.find((i) => i.id === id);
@@ -54,6 +54,15 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
       toast({
         title: "Please select at least 3 interests",
         description: "More interests create more interesting combinations!",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (selectedModels.length === 0) {
+      toast({
+        title: "Please select at least one model",
+        description: "Select one or more AI models to analyze your interests",
         variant: "destructive",
       });
       return;
@@ -126,10 +135,11 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
         <h2 className="text-2xl font-semibold mb-6">Select Your Interests</h2>
         
         <div className="mb-8">
-          <h3 className="text-lg font-medium mb-2">Choose AI Models</h3>
+          <h3 className="text-lg font-medium mb-4">Choose AI Models</h3>
           <ModelSelector 
             selectedModels={selectedModels}
             onModelsSelect={setSelectedModels}
+            straicoKey={straicoKey}
           />
         </div>
 
@@ -141,7 +151,7 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
         
         <AnalysisButton
           isLoading={isLoading}
-          disabled={isLoading || selectedInterests.length < 3}
+          disabled={isLoading || selectedInterests.length < 3 || selectedModels.length === 0}
           onClick={handleAnalyze}
         />
       </div>
