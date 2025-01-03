@@ -7,6 +7,7 @@ import StraicoKeyInput from "@/components/StraicoKeyInput";
 import ResultsSection from "@/components/ResultsSection";
 import AnalysisButton from "@/components/AnalysisButton";
 import { generateCombinations, generatePrompt } from "@/utils/combinationGenerator";
+import StraicoUserInfo from '@/components/StraicoUserInfo';
 
 const Index = () => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
@@ -151,6 +152,13 @@ const Index = () => {
           <p className="text-lg text-gray-600 mb-8">
             Select 3 or more interests to explore unique business opportunities
           </p>
+
+          {/* Add StraicoUserInfo component */}
+          {straicoKey && (
+            <div className="mb-8">
+              <StraicoUserInfo straicoKey={straicoKey} />
+            </div>
+          )}
 
           <div className="bg-white rounded-xl p-6 shadow-lg mb-8 text-left animate-fadeIn">
             <h2 className="text-xl font-semibold text-primary mb-4">How It Works:</h2>
