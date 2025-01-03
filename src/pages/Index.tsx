@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import StraicoKeyInput from "@/components/StraicoKeyInput";
 import ResultsSection from "@/components/ResultsSection";
 import StraicoUserInfo from '@/components/StraicoUserInfo';
@@ -20,7 +20,6 @@ const Index = () => {
   }>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [straicoKey, setStraicoKey] = useState("");
-  const { toast } = useToast();
 
   useEffect(() => {
     // Load Straico key from localStorage
@@ -57,7 +56,6 @@ const Index = () => {
             setIsInterestSelectorCollapsed={setIsInterestSelectorCollapsed}
             setUseCases={setUseCases}
             isInterestSelectorCollapsed={isInterestSelectorCollapsed}
-            toast={toast}
           />
         </div>
 
