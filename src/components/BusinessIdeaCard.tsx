@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
-import { ArrowDownCircle, Sparkles, Star } from "lucide-react";
+import { ArrowDownCircle, Sparkles, Star, Users, Coins, Rocket, Target, Trophy } from "lucide-react";
 import FilterButtons, { type ResultSection } from "./business-card/FilterButtons";
 import ResultContent from "./business-card/ResultContent";
-import BusinessIdeaHeader from "./business-card/BusinessIdeaHeader";
+import IdeaSection from "./business-card/IdeaSection";
+import SectionSummary from "./business-card/SectionSummary";
 
 interface BusinessIdeaCardProps {
   idea: string;
@@ -32,12 +33,18 @@ const BusinessIdeaCard = ({ idea, index, straicoKey }: BusinessIdeaCardProps) =>
 
   // Extract sections from the idea text
   const sections = {
-    bigIdea: idea.match(/The Big Idea[:\n]+(.*?)(?=Who It's For|$)/s)?.[1]?.trim() || "",
-    audience: idea.match(/Who It's For[:\n]+(.*?)(?=The Money Story|$)/s)?.[1]?.trim() || "",
-    moneyStory: idea.match(/The Money Story[:\n]+(.*?)(?=Getting Started|$)/s)?.[1]?.trim() || "",
-    gettingStarted: idea.match(/Getting Started[:\n]+(.*?)(?=Growth Path|$)/s)?.[1]?.trim() || "",
-    growthPath: idea.match(/Growth Path[:\n]+(.*?)(?=Success Factors|$)/s)?.[1]?.trim() || "",
-    successFactors: idea.match(/Success Factors[:\n]+(.*?)$/s)?.[1]?.trim() || "",
+    bigIdea: idea.match(/The Big Idea[:\n]+(.*?)(?=Summary:|Who It's For|$)/s)?.[1]?.trim() || "",
+    bigIdeaSummary: idea.match(/Summary:[:\n]+(.*?)(?=Who It's For|$)/s)?.[1]?.trim() || "",
+    audience: idea.match(/Who It's For[:\n]+(.*?)(?=Summary:|The Money Story|$)/s)?.[1]?.trim() || "",
+    audienceSummary: idea.match(/Summary:[:\n]+(.*?)(?=The Money Story|$)/s)?.[1]?.trim() || "",
+    moneyStory: idea.match(/The Money Story[:\n]+(.*?)(?=Summary:|Getting Started|$)/s)?.[1]?.trim() || "",
+    moneyStorySummary: idea.match(/Summary:[:\n]+(.*?)(?=Getting Started|$)/s)?.[1]?.trim() || "",
+    gettingStarted: idea.match(/Getting Started[:\n]+(.*?)(?=Summary:|Growth Path|$)/s)?.[1]?.trim() || "",
+    gettingStartedSummary: idea.match(/Summary:[:\n]+(.*?)(?=Growth Path|$)/s)?.[1]?.trim() || "",
+    growthPath: idea.match(/Growth Path[:\n]+(.*?)(?=Summary:|Success Factors|$)/s)?.[1]?.trim() || "",
+    growthPathSummary: idea.match(/Summary:[:\n]+(.*?)(?=Success Factors|$)/s)?.[1]?.trim() || "",
+    successFactors: idea.match(/Success Factors[:\n]+(.*?)(?=Summary:|$)/s)?.[1]?.trim() || "",
+    successFactorsSummary: idea.match(/Success Factors.*?Summary:[:\n]+(.*?)$/s)?.[1]?.trim() || "",
   };
 
   const handleDiveDeeper = async () => {
@@ -138,37 +145,46 @@ Provide growth strategies covering:
               The Big Idea
             </h3>
             <p className="mt-2 text-gray-700 leading-relaxed">{sections.bigIdea}</p>
+            <SectionSummary summary={sections.bigIdeaSummary} />
           </div>
 
-          {/* Who It's For Section */}
-          <div className="bg-white/50 rounded-lg p-4">
-            <h4 className="font-semibold text-lg text-primary mb-2">Who It's For</h4>
-            <p className="text-gray-700">{sections.audience}</p>
-          </div>
+          {/* Other Sections */}
+          <IdeaSection
+            title="Who It's For"
+            content={sections.audience}
+            summary={sections.audienceSummary}
+            icon={<Users className="w-5 h-5" />}
+          />
 
-          {/* Money Story Section */}
-          <div className="bg-primary/5 rounded-lg p-4">
-            <h4 className="font-semibold text-lg text-primary mb-2">The Money Story</h4>
-            <p className="text-gray-700">{sections.moneyStory}</p>
-          </div>
+          <IdeaSection
+            title="The Money Story"
+            content={sections.moneyStory}
+            summary={sections.moneyStorySummary}
+            className="bg-primary/5"
+            icon={<Coins className="w-5 h-5" />}
+          />
 
-          {/* Getting Started Section */}
-          <div className="bg-white/50 rounded-lg p-4">
-            <h4 className="font-semibold text-lg text-primary mb-2">Getting Started</h4>
-            <p className="text-gray-700">{sections.gettingStarted}</p>
-          </div>
+          <IdeaSection
+            title="Getting Started"
+            content={sections.gettingStarted}
+            summary={sections.gettingStartedSummary}
+            icon={<Rocket className="w-5 h-5" />}
+          />
 
-          {/* Growth Path Section */}
-          <div className="bg-primary/5 rounded-lg p-4">
-            <h4 className="font-semibold text-lg text-primary mb-2">Growth Path</h4>
-            <p className="text-gray-700">{sections.growthPath}</p>
-          </div>
+          <IdeaSection
+            title="Growth Path"
+            content={sections.growthPath}
+            summary={sections.growthPathSummary}
+            className="bg-primary/5"
+            icon={<Target className="w-5 h-5" />}
+          />
 
-          {/* Success Factors Section */}
-          <div className="bg-white/50 rounded-lg p-4">
-            <h4 className="font-semibold text-lg text-primary mb-2">Success Factors</h4>
-            <p className="text-gray-700">{sections.successFactors}</p>
-          </div>
+          <IdeaSection
+            title="Success Factors"
+            content={sections.successFactors}
+            summary={sections.successFactorsSummary}
+            icon={<Trophy className="w-5 h-5" />}
+          />
         </div>
         
         <div className="mt-8 flex flex-col items-center gap-4">

@@ -73,16 +73,28 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
     try {
       console.log('Making request to Straico API with key:', straicoKey.substring(0, 4) + '...');
       const interestNames = selectedInterests.map(getInterestName);
-      const prompt = `As an experienced business consultant, I'd like you to create engaging and detailed business ideas combining these interests/skills: ${interestNames.join(", ")}. 
+
+const prompt = `As an experienced business consultant, I'd like you to create engaging and detailed business ideas combining these interests/skills: ${interestNames.join(", ")}. 
 
 For each business idea, tell the story in a conversational, easy-to-understand way. Structure each idea like this:
 
 1. "The Big Idea" - Start with an exciting hook about what makes this business special
+   Summary: Add a brief, compelling one-liner that captures the essence of the idea
+
 2. "Who It's For" - Paint a clear picture of the ideal customers
+   Summary: Describe your target audience in one memorable sentence
+
 3. "The Money Story" - Explain how it makes money in simple terms
+   Summary: Capture the core revenue model in a punchy statement
+
 4. "Getting Started" - Break down the first steps in a practical way
+   Summary: Highlight the key initial action to take
+
 5. "Growth Path" - Share the vision for how it can grow
+   Summary: Paint the future potential in one exciting sentence
+
 6. "Success Factors" - What will make this work?
+   Summary: Identify the single most critical factor for success
 
 Make each idea feel like a conversation, not a business plan. Use everyday language and real examples where possible.
 
@@ -94,6 +106,7 @@ Remember to:
 - Make the opportunities feel tangible and achievable
 - Focus on practical steps and clear value
 - Highlight the human elements of each business
+- Include brief, memorable summaries for each section
 
 Please provide 3-4 well-thought-out ideas that really bring these interests together in creative ways.`;
 
