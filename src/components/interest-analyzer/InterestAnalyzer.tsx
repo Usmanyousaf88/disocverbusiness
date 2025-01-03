@@ -25,6 +25,7 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
 }) => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [selectedModels, setSelectedModels] = useState<string[]>([]);
+  const [analysisStage, setAnalysisStage] = useState<"generating" | "analyzing" | "complete">("generating");
 
   const getInterestName = (id: string): string => {
     const interest = InterestSelector.predefinedInterests?.find((i) => i.id === id);
@@ -68,6 +69,7 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
     }
 
     setIsLoading(true);
+    setAnalysisStage("generating");
     setIsInterestSelectorCollapsed(true);
     
     try {
@@ -145,6 +147,8 @@ Please provide exactly 5 well-researched, market-ready business ideas that creat
         }),
       });
 
+      setAnalysisStage("analyzing");
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         console.error('Straico API error:', errorData);
@@ -154,7 +158,6 @@ Please provide exactly 5 well-researched, market-ready business ideas that creat
       const data = await response.json();
       console.log('Straico API response:', data);
 
-      // Ensure we only create one completion per model
       const completions = Object.entries(data.data.completions).map(([model, completion]: [string, any]) => ({
         title: `${model.split('/')[1]} Analysis`,
         description: "AI-generated business opportunities based on your interests",
@@ -168,6 +171,7 @@ Please provide exactly 5 well-researched, market-ready business ideas that creat
 
       setUseCases(completions);
       setShowResults(true);
+      setAnalysisStage("complete");
       
       toast({
         title: "Success!",
@@ -180,6 +184,7 @@ Please provide exactly 5 well-researched, market-ready business ideas that creat
         description: error instanceof Error ? error.message : "Failed to generate AI responses. Please check your Straico API key and try again.",
         variant: "destructive",
       });
+      setAnalysisStage("complete");
     } finally {
       setIsLoading(false);
     }
