@@ -66,7 +66,7 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
       </div>
       
       {/* Success Metrics Chart */}
-      <Card className="p-6 bg-white/80 backdrop-blur-sm">
+      <Card className="p-6 bg-gradient-to-br from-white via-purple-50 to-primary-light/10 shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-purple-100">
         <h3 className="text-xl font-semibold text-primary mb-4">Business Ideas Success Metrics</h3>
         <div className="h-[400px] w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -90,7 +90,7 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
         
         return (
           <div key={useCase.title} className="space-y-6">
-            <Card className="p-6 bg-gradient-to-r from-primary/10 to-primary/5">
+            <Card className="p-6 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 hover:from-primary/10 hover:to-primary/5 transition-all duration-300">
               <h3 className="text-xl font-semibold text-primary mb-2">{useCase.title}</h3>
               <p className="text-gray-600">{useCase.description}</p>
               <div className="mt-4">
@@ -99,10 +99,10 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
               </div>
               {useCase.price && (
                 <div className="mt-4 flex gap-4 text-sm">
-                  <div className="bg-white/50 p-2 rounded">
+                  <div className="bg-white/50 p-2 rounded-lg shadow-sm">
                     <p className="text-gray-600">Processing Cost: ${useCase.price.total.toFixed(2)}</p>
                   </div>
-                  <div className="bg-white/50 p-2 rounded">
+                  <div className="bg-white/50 p-2 rounded-lg shadow-sm">
                     <p className="text-gray-600">Words Processed: {useCase.words?.total}</p>
                   </div>
                 </div>
