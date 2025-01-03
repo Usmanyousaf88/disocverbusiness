@@ -11,9 +11,10 @@ interface BusinessIdeaCardProps {
   idea: string;
   index: number;
   apiKey: string;
+  straicoKey: string;  // Added this line
 }
 
-const BusinessIdeaCard = ({ idea, index, apiKey }: BusinessIdeaCardProps) => {
+const BusinessIdeaCard = ({ idea, index, apiKey, straicoKey }: BusinessIdeaCardProps) => {
   const [loadingDeepDive, setLoadingDeepDive] = useState(false);
   const [deepDiveResponse, setDeepDiveResponse] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<ResultSection>('all');
