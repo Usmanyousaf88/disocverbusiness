@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InterestSelector from "@/components/InterestSelector";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import ApiKeyInput from "@/components/ApiKeyInput";
+import StraicoKeyInput from "@/components/StraicoKeyInput";
 import ResultsSection from "@/components/ResultsSection";
 import AnalysisButton from "@/components/AnalysisButton";
 import { generateCombinations, generatePrompt } from "@/utils/combinationGenerator";
@@ -21,7 +22,22 @@ const Index = () => {
   }>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKey] = useState("");
+  const [straicoKey, setStraicoKey] = useState("");
   const { toast } = useToast();
+
+  useEffect(() => {
+    // Load API keys from localStorage
+    const savedApiKey = localStorage.getItem('openai_api_key');
+    const savedStraicoKey = localStorage.getItem('straico_api_key');
+    if (savedApiKey) setApiKey(savedApiKey);
+    if (savedStraicoKey) setStraicoKey(savedStraicoKey);
+  }, []);
+
+  useEffect(() => {
+    // Save API keys to localStorage when they change
+    if (apiKey) localStorage.setItem('openai_api_key', apiKey);
+    if (straicoKey) localStorage.setItem('straico_api_key', straicoKey);
+  }, [apiKey, straicoKey]);
 
   const handleInterestSelect = (id: string) => {
     setSelectedInterests((prev) =>
@@ -41,6 +57,15 @@ const Index = () => {
       toast({
         title: "API Key Required",
         description: "Please enter your OpenAI API key to generate combinations",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!straicoKey) {
+      toast({
+        title: "Straico API Key Required",
+        description: "Please enter your Straico API key to use the RAG functionality",
         variant: "destructive",
       });
       return;
@@ -108,7 +133,7 @@ const Index = () => {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to generate AI responses. Please check your API key and try again.",
+        description: "Failed to generate AI responses. Please check your API keys and try again.",
         variant: "destructive",
       });
     } finally {
@@ -152,6 +177,7 @@ const Index = () => {
 
         <div className="bg-gradient-to-br from-white to-gray-50 rounded-lg shadow-lg p-6 mb-8">
           <ApiKeyInput apiKey={apiKey} setApiKey={setApiKey} />
+          <StraicoKeyInput straicoKey={straicoKey} setStraicoKey={setStraicoKey} />
 
           <h2 className="text-2xl font-semibold mb-6">Select Your Interests</h2>
           <InterestSelector
@@ -170,6 +196,7 @@ const Index = () => {
           showResults={showResults} 
           useCases={useCases} 
           apiKey={apiKey}
+          straicoKey={straicoKey}
         />
       </div>
     </div>
