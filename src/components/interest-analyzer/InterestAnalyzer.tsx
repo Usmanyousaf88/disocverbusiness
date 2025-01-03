@@ -74,64 +74,42 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
       console.log('Making request to Straico API with key:', straicoKey.substring(0, 4) + '...');
       const interestNames = selectedInterests.map(getInterestName);
 
-const prompt = `As an expert business strategist and startup consultant, I'll help you create 5 innovative, market-ready business concepts that combine these interests/skills: ${interestNames.join(", ")}. 
+const prompt = `As an experienced business consultant, I'd like you to create engaging and detailed business ideas combining these interests/skills: ${interestNames.join(", ")}. 
 
-For each business idea, I'll craft a compelling narrative that showcases its unique value proposition and market potential. Structure each idea as follows:
+For each business idea, tell the story in a conversational, easy-to-understand way. Start with an overview paragraph that paints a picture of the business concept in an engaging way. Then structure each idea like this:
 
-🎯 [IDEA NAME] - Start with a catchy, memorable business name that captures the essence of the concept
+1. "The Big Idea" - Start with an exciting hook about what makes this business special and how it works in practice
+   Summary: Add a brief, compelling one-liner that captures the essence of the idea
 
-📝 Overview
-Begin with an engaging executive summary that paints a vivid picture of the business concept, its core value proposition, and why it's exciting and timely in today's market.
+2. "Who It's For" - Paint a clear picture of the ideal customers, their pain points, and how this solution helps them
+   Summary: Describe your target audience in one memorable sentence
 
-1. "The Big Idea"
-- Start with a hook that captures attention
-- Explain the unique innovation or approach
-- Highlight what makes this business special
-Summary: A powerful one-liner that encapsulates the core concept
+3. "The Money Story" - Explain how it makes money in simple terms, with specific examples of pricing and revenue streams
+   Summary: Capture the core revenue model in a punchy statement
 
-2. "Who It's For"
-- Create detailed customer personas
-- Identify specific pain points and needs
-- Explain how this solution transforms their experience
-Summary: Crystal-clear target audience definition
+4. "Getting Started" - Break down the first steps in a practical way, like a friend giving advice
+   Summary: Highlight the key initial action to take
 
-3. "The Money Story"
-- Break down primary and secondary revenue streams
-- Include specific pricing strategies and examples
-- Show path to profitability
-Summary: Compelling revenue model explanation
+5. "Growth Path" - Share the vision for how it can grow, with realistic milestones
+   Summary: Paint the future potential in one exciting sentence
 
-4. "Getting Started"
-- Outline concrete first steps and milestones
-- Include resource requirements
-- Provide actionable launch strategy
-Summary: Clear roadmap to launch
+6. "Success Factors" - What will make this work? Include real-world examples and practical tips
+   Summary: Identify the single most critical factor for success
 
-5. "Growth Path"
-- Detail expansion opportunities
-- Include market size and potential
-- Outline scaling strategies
-Summary: Exciting growth trajectory
+Make each idea feel like a conversation, not a business plan. Use everyday language and real examples where possible. Each section should tell part of the story, flowing naturally from one to the next.
 
-6. "Success Factors"
-- List critical elements for success
-- Include competitive advantages
-- Highlight unique opportunities
-Summary: Key drivers of success
-
-Make each idea feel like a story worth investing in. Use conversational language while maintaining professional insight. Focus on:
-- Market viability and current trends
-- Realistic implementation steps
-- Clear competitive advantages
-- Innovative combinations of the selected interests
-- Sustainable business models
-- Technology integration where relevant
-- Social impact potential
-- Scalability factors
+Remember to:
+- Keep it conversational and engaging
+- Use real-world examples and scenarios
+- Make the opportunities feel tangible and achievable
+- Focus on practical steps and clear value
+- Highlight the human elements of each business
+- Include brief, memorable summaries for each section
+- Add personality and warmth to the descriptions
 
 Separate each complete business idea with "---" between them.
 
-Please provide exactly 5 well-researched, market-ready business ideas that creatively combine these interests into viable ventures. Number each idea (IDEA #1, IDEA #2, etc.) and ensure each has a unique angle and approach.`;
+Please provide 3-4 well-thought-out ideas that really bring these interests together in creative ways.`;
 
       const response = await fetch('https://api.straico.com/v1/prompt/completion', {
         method: 'POST',
@@ -154,7 +132,6 @@ Please provide exactly 5 well-researched, market-ready business ideas that creat
       const data = await response.json();
       console.log('Straico API response:', data);
 
-      // Ensure we only create one completion per model
       const completions = Object.entries(data.data.completions).map(([model, completion]: [string, any]) => ({
         title: `${model.split('/')[1]} Analysis`,
         description: "AI-generated business opportunities based on your interests",
@@ -171,7 +148,7 @@ Please provide exactly 5 well-researched, market-ready business ideas that creat
       
       toast({
         title: "Success!",
-        description: "Generated innovative business opportunities based on your interests",
+        description: "Generated business opportunities based on your interests",
       });
     } catch (error) {
       console.error('Error in handleAnalyze:', error);
