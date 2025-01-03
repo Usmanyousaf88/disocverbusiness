@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import StraicoKeyInput from "@/components/StraicoKeyInput";
 import ResultsSection from "@/components/ResultsSection";
 import StraicoUserInfo from '@/components/StraicoUserInfo';
@@ -57,7 +57,7 @@ const Index = () => {
             setIsInterestSelectorCollapsed={setIsInterestSelectorCollapsed}
             setUseCases={setUseCases}
             isInterestSelectorCollapsed={isInterestSelectorCollapsed}
-            toast={toast}
+            toast={useToast()}
           />
         </div>
 
