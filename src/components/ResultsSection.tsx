@@ -52,7 +52,7 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
               />
             ))}
           </div>
-        ));
+        );
       })}
     </div>
   );
