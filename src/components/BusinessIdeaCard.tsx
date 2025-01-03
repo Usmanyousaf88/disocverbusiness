@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
@@ -18,6 +18,7 @@ const BusinessIdeaCard = ({ idea, index, straicoKey }: BusinessIdeaCardProps) =>
   const [loadingDeepDive, setLoadingDeepDive] = useState(false);
   const [deepDiveResponse, setDeepDiveResponse] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<ResultSection>('all');
+  const [isReady, setIsReady] = useState(false);
   const { toast } = useToast();
 
   const getGradientClass = (index: number): string => {
@@ -47,58 +48,71 @@ const BusinessIdeaCard = ({ idea, index, straicoKey }: BusinessIdeaCardProps) =>
     successFactorsSummary: idea.match(/Success Factors.*?Summary:[:\n]+(.*?)$/s)?.[1]?.trim() || "",
   };
 
+  useEffect(() => {
+    // Validate that all required sections have content
+    const hasAllSections = Object.values(sections).every(section => section.length > 0);
+    console.log('Sections validation:', hasAllSections, sections);
+    setIsReady(hasAllSections);
+  }, [sections]);
+
   const handleDiveDeeper = async () => {
     setLoadingDeepDive(true);
     try {
       const prompt = {
         sections: {
-          productDevelopment: `Analyze this business idea and provide key insights on product development:
+          productDevelopment: `Analyze this business idea and provide detailed insights on product development (min 500 words):
 ${sections.bigIdea}
 
 Focus on:
 1. Core features and unique value proposition
 2. Technical requirements and implementation
 3. Development timeline and key milestones
-4. MVP scope and initial features`,
+4. MVP scope and initial features
+5. Product roadmap and future enhancements`,
 
-          marketValidation: `For this business idea:
+          marketValidation: `For this business idea, provide comprehensive market analysis (min 500 words):
 ${sections.audience}
 
-Provide market analysis covering:
+Cover:
 1. Target market size and demographics
 2. Customer pain points and needs
 3. Market opportunities and gaps
-4. Competitive landscape analysis`,
+4. Competitive landscape analysis
+5. Market entry strategy`,
 
-          monetization: `Based on this concept:
+          monetization: `Based on this concept, detail the monetization approach (min 500 words):
 ${sections.moneyStory}
 
-Detail the monetization approach:
-1. Primary revenue streams
+Include:
+1. Primary and secondary revenue streams
 2. Pricing strategy and models
 3. Customer acquisition costs
-4. Potential upsell opportunities`,
+4. Potential upsell opportunities
+5. Financial projections and breakeven analysis`,
 
-          operations: `For implementing this business:
+          operations: `For implementing this business, outline operational requirements (min 500 words):
 ${sections.gettingStarted}
 
-Outline operational requirements:
+Detail:
 1. Team structure and key roles
 2. Required resources and tools
 3. Core processes and workflows
-4. Quality assurance measures`,
+4. Quality assurance measures
+5. Risk management and mitigation strategies`,
 
-          growth: `To scale this business:
+          growth: `To scale this business, provide comprehensive growth strategies (min 500 words):
 ${sections.growthPath}
 
-Provide growth strategies covering:
+Include:
 1. Expansion roadmap
 2. Partnership opportunities
 3. Market penetration tactics
-4. Future development plans`
+4. Future development plans
+5. Success metrics and KPIs`
         }
       };
 
+      console.log('Sending analysis request to Straico API');
       const response = await fetch('https://api.straico.com/v0/rag/prompt', {
         method: 'POST',
         headers: {
@@ -107,7 +121,8 @@ Provide growth strategies covering:
         },
         body: JSON.stringify({
           prompt: JSON.stringify(prompt),
-          model: "anthropic/claude-3.5-sonnet"
+          model: "anthropic/claude-3.5-sonnet",
+          max_tokens: 4000 // Increased token limit for more detailed responses
         }),
       });
 
@@ -116,14 +131,16 @@ Provide growth strategies covering:
       }
 
       const data = await response.json();
+      console.log('Received analysis response:', data);
       const deepDiveResponse = data.response.answer;
       setDeepDiveResponse(deepDiveResponse);
 
       toast({
         title: "Analysis Complete",
-        description: "Your business roadmap is ready to explore",
+        description: "Your comprehensive business roadmap is ready to explore",
       });
     } catch (error) {
+      console.error('Analysis error:', error);
       toast({
         title: "Error",
         description: "Failed to generate analysis. Please try again.",
@@ -133,6 +150,10 @@ Provide growth strategies covering:
       setLoadingDeepDive(false);
     }
   };
+
+  if (!isReady) {
+    return null; // Don't render the card until all sections are properly loaded
+  }
 
   return (
     <Card className={`overflow-hidden transition-all duration-300 hover:shadow-xl ${getGradientClass(index)}`}>
