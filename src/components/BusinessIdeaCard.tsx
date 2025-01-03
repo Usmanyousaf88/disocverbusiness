@@ -113,7 +113,7 @@ Include:
         }
       };
 
-      console.log('Sending analysis request to Straico API with prompt:', prompt);
+      console.log('Sending analysis request to Straico API...');
       const response = await fetch('https://api.straico.com/v0/rag/prompt', {
         method: 'POST',
         headers: {
@@ -154,17 +154,6 @@ Include:
       setLoadingDeepDive(false);
     }
   };
-
-  // Validate sections before rendering
-  useEffect(() => {
-    const hasAllSections = Object.values(sections).every(section => {
-      const content = section.trim();
-      console.log('Validating section content:', content ? 'Has content' : 'Empty');
-      return content.length > 0;
-    });
-    console.log('All sections validation result:', hasAllSections);
-    setIsReady(hasAllSections);
-  }, [sections]);
 
   if (!isReady) {
     console.log('Card not ready - missing section content');
@@ -251,7 +240,7 @@ Include:
               />
               <div className="mt-4 bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-lg">
                 <ResultContent 
-                  content={deepDiveResponse.split('\n')}
+                  content={deepDiveResponse}
                   activeSection={activeSection}
                 />
               </div>

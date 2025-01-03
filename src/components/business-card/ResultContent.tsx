@@ -6,28 +6,26 @@ import { filterContent } from './result/filterContent';
 import { getIntroText } from './result/getIntroText';
 
 interface ResultContentProps {
-  content: string[] | string | null;
+  content: string;
   activeSection: ResultSection;
 }
 
 const ResultContent: React.FC<ResultContentProps> = ({ content, activeSection }) => {
-  const formatDeepDiveResponse = (response: string): JSX.Element[] => {
-    const sections = response
-      .split(/(?=Product Development:|Market Validation:|Monetization Strategy:|Technical Infrastructure:|Go-to-Market Strategy:|Business Operations:|Legal and Compliance:|Financial Planning:|Growth Strategy:|Success Metrics:)/g)
-      .filter(section => section.trim());
-
-    return sections.map((section, index) => {
-      const [title, ...content] = section.split('\n');
-      const sectionTitle = title.replace(':', '');
-      const introText = getIntroText(sectionTitle);
+  const renderSections = (sections: { [key: string]: string }) => {
+    return Object.entries(sections).map(([section, content]) => {
+      const sectionTitle = section.charAt(0).toUpperCase() + section.slice(1)
+        .replace(/([A-Z])/g, ' $1')
+        .trim();
+      
+      const introText = getIntroText(section);
 
       return (
-        <SectionCard 
-          key={index}
+        <SectionCard
+          key={section}
           title={sectionTitle}
           introText={introText}
         >
-          <SectionContent content={content.join('\n')} />
+          <SectionContent content={content} />
         </SectionCard>
       );
     });
@@ -35,14 +33,11 @@ const ResultContent: React.FC<ResultContentProps> = ({ content, activeSection })
 
   if (!content) return null;
 
-  const contentString = Array.isArray(content) ? content.join('\n') : content;
-  const filteredContent = filterContent(contentString, activeSection);
+  const filteredContent = filterContent(content, activeSection);
   
   return (
     <div className="mt-8">
-      <div className="prose prose-lg max-w-none space-y-4">
-        {formatDeepDiveResponse(filteredContent)}
-      </div>
+      {renderSections(filteredContent)}
     </div>
   );
 };
