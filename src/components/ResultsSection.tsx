@@ -1,7 +1,7 @@
 import React from "react";
 import BusinessIdeaCard from "./BusinessIdeaCard";
 import { Card } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Sparkles } from "lucide-react";
 
 interface UseCase {
@@ -39,22 +39,23 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
 
   // Calculate success metrics based on keywords in the response
   const calculateSuccessMetrics = (response: string) => {
-    const positiveKeywords = ['profitable', 'growing market', 'high demand', 'scalable', 'innovative'];
-    const score = positiveKeywords.reduce((acc, keyword) => {
+    const fruitKeywords = ['organic', 'seasonal', 'fresh', 'local', 'sustainable'];
+    const score = fruitKeywords.reduce((acc, keyword) => {
       return acc + (response.toLowerCase().includes(keyword.toLowerCase()) ? 20 : 0);
     }, 0);
-    return Math.min(score, 100); // Cap at 100%
+    return Math.min(score, 100);
   };
 
-  // Prepare data for the chart
+  // Prepare data for the pie chart
+  const COLORS = ['#8B5CF6', '#C4B5FD', '#7C3AED', '#DDD6FE', '#EDE9FE'];
+  
   const chartData = useCases.flatMap((useCase) => {
     if (!useCase.aiResponse) return [];
     
     const ideas = splitIdeasFromResponse(useCase.aiResponse);
     return ideas.map((idea, index) => ({
-      name: `Idea ${index + 1}`,
-      successScore: calculateSuccessMetrics(idea),
-      costEfficiency: useCase.price ? Math.round((100 - (useCase.price.total / 10)) * 10) / 10 : 0,
+      name: `Fruit Idea ${index + 1}`,
+      value: calculateSuccessMetrics(idea),
     }));
   });
 
@@ -62,22 +63,32 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
     <div className="space-y-8 animate-fadeIn">
       <div className="flex items-center gap-3 mb-6">
         <Sparkles className="w-6 h-6 text-primary animate-pulse" />
-        <h2 className="text-2xl font-bold text-primary">Your AI-Generated Business Ideas</h2>
+        <h2 className="text-2xl font-bold text-primary">Your Fruit Business Ideas</h2>
       </div>
       
       {/* Success Metrics Chart */}
       <Card className="p-6 bg-gradient-to-br from-white via-purple-50 to-primary-light/10 shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-purple-100">
-        <h3 className="text-xl font-semibold text-primary mb-4">Business Ideas Success Metrics</h3>
+        <h3 className="text-xl font-semibold text-primary mb-4">Fruit Business Success Potential</h3>
         <div className="h-[400px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="successScore" name="Success Score" fill="#8B5CF6" />
-              <Bar dataKey="costEfficiency" name="Cost Efficiency" fill="#F97316" />
-            </BarChart>
+            <PieChart>
+              <Pie
+                data={chartData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                outerRadius={150}
+                fill="#8B5CF6"
+                dataKey="value"
+                label={({ name, value }) => `${name}: ${value}%`}
+              >
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip formatter={(value) => `${value}% potential`} />
+              <Legend />
+            </PieChart>
           </ResponsiveContainer>
         </div>
       </Card>
