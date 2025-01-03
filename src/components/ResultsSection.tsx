@@ -2,6 +2,7 @@ import React from "react";
 import BusinessIdeaCard from "./BusinessIdeaCard";
 import { Card } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Sparkles } from "lucide-react";
 
 interface UseCase {
   title: string;
@@ -59,7 +60,10 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
 
   return (
     <div className="space-y-8 animate-fadeIn">
-      <h2 className="text-2xl font-bold text-primary mb-4">Your AI-Generated Business Ideas</h2>
+      <div className="flex items-center gap-3 mb-6">
+        <Sparkles className="w-6 h-6 text-primary animate-pulse" />
+        <h2 className="text-2xl font-bold text-primary">Your AI-Generated Business Ideas</h2>
+      </div>
       
       {/* Success Metrics Chart */}
       <Card className="p-6 bg-white/80 backdrop-blur-sm">
@@ -105,7 +109,7 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
               )}
             </Card>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               {ideas.map((idea, ideaIndex) => (
                 <BusinessIdeaCard
                   key={`idea-${ideaIndex}`}

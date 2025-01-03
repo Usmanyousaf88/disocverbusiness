@@ -3,7 +3,6 @@ import { toast } from "@/components/ui/use-toast";
 import InterestSelector from "@/components/InterestSelector";
 import AnalysisButton from "@/components/AnalysisButton";
 import ModelSelector from "@/components/ModelSelector";
-import { generatePrompt } from "@/utils/combinationGenerator";
 
 interface InterestAnalyzerProps {
   straicoKey: string;
@@ -74,9 +73,29 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
     try {
       console.log('Making request to Straico API with key:', straicoKey.substring(0, 4) + '...');
       const interestNames = selectedInterests.map(getInterestName);
-      const prompt = `Generate innovative business ideas that combine these interests/skills: ${interestNames.join(", ")}. 
-      For each combination, provide detailed analysis including target market, revenue potential, and implementation steps.
-      Format each idea with "---" between them.`;
+      const prompt = `As an experienced business consultant, I'd like you to create engaging and detailed business ideas combining these interests/skills: ${interestNames.join(", ")}. 
+
+For each business idea, tell the story in a conversational, easy-to-understand way. Structure each idea like this:
+
+1. "The Big Idea" - Start with an exciting hook about what makes this business special
+2. "Who It's For" - Paint a clear picture of the ideal customers
+3. "The Money Story" - Explain how it makes money in simple terms
+4. "Getting Started" - Break down the first steps in a practical way
+5. "Growth Path" - Share the vision for how it can grow
+6. "Success Factors" - What will make this work?
+
+Make each idea feel like a conversation, not a business plan. Use everyday language and real examples where possible.
+
+Separate each complete business idea with "---" between them.
+
+Remember to:
+- Keep it conversational and engaging
+- Use real-world examples where possible
+- Make the opportunities feel tangible and achievable
+- Focus on practical steps and clear value
+- Highlight the human elements of each business
+
+Please provide 3-4 well-thought-out ideas that really bring these interests together in creative ways.`;
 
       const response = await fetch('https://api.straico.com/v1/prompt/completion', {
         method: 'POST',

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
-import { ArrowDownCircle, Sparkles } from "lucide-react";
+import { ArrowDownCircle, Sparkles, Star } from "lucide-react";
 import FilterButtons, { type ResultSection } from "./business-card/FilterButtons";
 import ResultContent from "./business-card/ResultContent";
 import BusinessIdeaHeader from "./business-card/BusinessIdeaHeader";
@@ -30,13 +30,23 @@ const BusinessIdeaCard = ({ idea, index, straicoKey }: BusinessIdeaCardProps) =>
     return gradients[index % gradients.length];
   };
 
+  // Extract sections from the idea text
+  const sections = {
+    bigIdea: idea.match(/The Big Idea[:\n]+(.*?)(?=Who It's For|$)/s)?.[1]?.trim() || "",
+    audience: idea.match(/Who It's For[:\n]+(.*?)(?=The Money Story|$)/s)?.[1]?.trim() || "",
+    moneyStory: idea.match(/The Money Story[:\n]+(.*?)(?=Getting Started|$)/s)?.[1]?.trim() || "",
+    gettingStarted: idea.match(/Getting Started[:\n]+(.*?)(?=Growth Path|$)/s)?.[1]?.trim() || "",
+    growthPath: idea.match(/Growth Path[:\n]+(.*?)(?=Success Factors|$)/s)?.[1]?.trim() || "",
+    successFactors: idea.match(/Success Factors[:\n]+(.*?)$/s)?.[1]?.trim() || "",
+  };
+
   const handleDiveDeeper = async () => {
     setLoadingDeepDive(true);
     try {
       const prompt = {
         sections: {
-          productDevelopment: `Analyze the following business idea and provide key insights on product development:
-${idea}
+          productDevelopment: `Analyze this business idea and provide key insights on product development:
+${sections.bigIdea}
 
 Focus on:
 1. Core features and unique value proposition
@@ -45,7 +55,7 @@ Focus on:
 4. MVP scope and initial features`,
 
           marketValidation: `For this business idea:
-${idea}
+${sections.audience}
 
 Provide market analysis covering:
 1. Target market size and demographics
@@ -53,8 +63,8 @@ Provide market analysis covering:
 3. Market opportunities and gaps
 4. Competitive landscape analysis`,
 
-          monetization: `Based on this business concept:
-${idea}
+          monetization: `Based on this concept:
+${sections.moneyStory}
 
 Detail the monetization approach:
 1. Primary revenue streams
@@ -63,7 +73,7 @@ Detail the monetization approach:
 4. Potential upsell opportunities`,
 
           operations: `For implementing this business:
-${idea}
+${sections.gettingStarted}
 
 Outline operational requirements:
 1. Team structure and key roles
@@ -71,8 +81,8 @@ Outline operational requirements:
 3. Core processes and workflows
 4. Quality assurance measures`,
 
-          growth: `To scale this business idea:
-${idea}
+          growth: `To scale this business:
+${sections.growthPath}
 
 Provide growth strategies covering:
 1. Expansion roadmap
@@ -120,13 +130,52 @@ Provide growth strategies covering:
   return (
     <Card className={`overflow-hidden transition-all duration-300 hover:shadow-xl ${getGradientClass(index)}`}>
       <div className="p-8">
-        <BusinessIdeaHeader idea={idea} />
+        <div className="space-y-6">
+          {/* Big Idea Section */}
+          <div className="border-l-4 border-primary pl-4">
+            <h3 className="text-2xl font-bold text-primary flex items-center gap-2">
+              <Star className="w-6 h-6" />
+              The Big Idea
+            </h3>
+            <p className="mt-2 text-gray-700 leading-relaxed">{sections.bigIdea}</p>
+          </div>
+
+          {/* Who It's For Section */}
+          <div className="bg-white/50 rounded-lg p-4">
+            <h4 className="font-semibold text-lg text-primary mb-2">Who It's For</h4>
+            <p className="text-gray-700">{sections.audience}</p>
+          </div>
+
+          {/* Money Story Section */}
+          <div className="bg-primary/5 rounded-lg p-4">
+            <h4 className="font-semibold text-lg text-primary mb-2">The Money Story</h4>
+            <p className="text-gray-700">{sections.moneyStory}</p>
+          </div>
+
+          {/* Getting Started Section */}
+          <div className="bg-white/50 rounded-lg p-4">
+            <h4 className="font-semibold text-lg text-primary mb-2">Getting Started</h4>
+            <p className="text-gray-700">{sections.gettingStarted}</p>
+          </div>
+
+          {/* Growth Path Section */}
+          <div className="bg-primary/5 rounded-lg p-4">
+            <h4 className="font-semibold text-lg text-primary mb-2">Growth Path</h4>
+            <p className="text-gray-700">{sections.growthPath}</p>
+          </div>
+
+          {/* Success Factors Section */}
+          <div className="bg-white/50 rounded-lg p-4">
+            <h4 className="font-semibold text-lg text-primary mb-2">Success Factors</h4>
+            <p className="text-gray-700">{sections.successFactors}</p>
+          </div>
+        </div>
         
         <div className="mt-8 flex flex-col items-center gap-4">
           <Button
             onClick={handleDiveDeeper}
             disabled={loadingDeepDive}
-            className="bg-primary hover:bg-primary-hover text-white transition-colors duration-300 flex items-center gap-2 text-lg px-6 py-6 rounded-xl"
+            className="bg-primary hover:bg-primary-hover text-white transition-colors duration-300 flex items-center gap-2 text-lg px-6 py-6 rounded-xl w-full md:w-auto"
           >
             {loadingDeepDive ? (
               <>
