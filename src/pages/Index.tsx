@@ -57,7 +57,7 @@ const Index = () => {
             setIsInterestSelectorCollapsed={setIsInterestSelectorCollapsed}
             setUseCases={setUseCases}
             isInterestSelectorCollapsed={isInterestSelectorCollapsed}
-            toast={useToast()}
+            toast={toast}
           />
         </div>
 
