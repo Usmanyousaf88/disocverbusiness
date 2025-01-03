@@ -6,31 +6,40 @@ import { filterContent } from './result/filterContent';
 import { getIntroText } from './result/getIntroText';
 
 interface ResultContentProps {
-  content: string;
+  content: string | null;
   activeSection: ResultSection;
 }
 
 const ResultContent: React.FC<ResultContentProps> = ({ content, activeSection }) => {
-  const sections = filterContent(content, activeSection);
+  const formatDeepDiveResponse = (response: string): JSX.Element[] => {
+    const sections = response
+      .split(/(?=Product Development:|Market Validation:|Monetization Strategy:|Technical Infrastructure:|Go-to-Market Strategy:|Business Operations:|Legal and Compliance:|Financial Planning:|Growth Strategy:|Success Metrics:)/g)
+      .filter(section => section.trim());
+
+    return sections.map((section, index) => {
+      const [title, ...content] = section.split('\n');
+      const sectionTitle = title.replace(':', '');
+      const introText = getIntroText(sectionTitle);
+
+      return (
+        <SectionCard 
+          key={index}
+          title={sectionTitle}
+          introText={introText}
+        >
+          <SectionContent content={content} />
+        </SectionCard>
+      );
+    });
+  };
+
+  const filteredContent = filterContent(content, activeSection);
   
   return (
     <div className="mt-8">
-      {Object.entries(sections).map(([section, content]) => {
-        const sectionTitle = section
-          .replace(/([A-Z])/g, ' $1')
-          .replace(/^./, str => str.toUpperCase())
-          .trim();
-        
-        return (
-          <SectionCard
-            key={section}
-            title={sectionTitle}
-            introText={getIntroText(section)}
-          >
-            <SectionContent content={content} />
-          </SectionCard>
-        );
-      })}
+      <div className="prose prose-lg max-w-none space-y-4">
+        {formatDeepDiveResponse(filteredContent)}
+      </div>
     </div>
   );
 };

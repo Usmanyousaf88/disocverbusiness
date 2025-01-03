@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
@@ -18,7 +18,6 @@ const BusinessIdeaCard = ({ idea, index, straicoKey }: BusinessIdeaCardProps) =>
   const [loadingDeepDive, setLoadingDeepDive] = useState(false);
   const [deepDiveResponse, setDeepDiveResponse] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<ResultSection>('all');
-  const [isReady, setIsReady] = useState(false);
   const { toast } = useToast();
 
   const getGradientClass = (index: number): string => {
@@ -48,64 +47,58 @@ const BusinessIdeaCard = ({ idea, index, straicoKey }: BusinessIdeaCardProps) =>
     successFactorsSummary: idea.match(/Success Factors.*?Summary:[:\n]+(.*?)$/s)?.[1]?.trim() || "",
   };
 
-  useEffect(() => {
-    // Validate that all required sections have content
-    const hasAllSections = Object.values(sections).every(section => section.length > 0);
-    console.log('Sections validation:', hasAllSections, sections);
-    setIsReady(hasAllSections);
-  }, [sections]);
-
   const handleDiveDeeper = async () => {
     setLoadingDeepDive(true);
     try {
-      console.log('Starting deep dive analysis...');
-      const prompt = `Analyze this business idea and provide a detailed breakdown in the following format:
-
-Product Development:
-[Provide detailed product development analysis]
-- Core features and technical requirements
-- Development timeline and milestones
-- MVP scope and roadmap
-[End with a clear summary]
-
-Market Validation:
-[Provide comprehensive market analysis]
-- Target market size and demographics
-- Customer pain points and needs
-- Competitive landscape
-[End with a clear summary]
-
-Monetization:
-[Detail the monetization strategy]
-- Revenue streams and pricing models
-- Customer acquisition costs
-- Financial projections
-[End with a clear summary]
-
-Operations:
-[Outline operational requirements]
-- Team structure and key roles
-- Core processes and workflows
-- Risk management strategies
-[End with a clear summary]
-
-Growth:
-[Provide growth and scaling strategy]
-- Expansion roadmap
-- Partnership opportunities
-- Success metrics and KPIs
-[End with a clear summary]
-
-Business Idea to Analyze:
+      const prompt = {
+        sections: {
+          productDevelopment: `Analyze this business idea and provide key insights on product development:
 ${sections.bigIdea}
 
-Target Audience:
+Focus on:
+1. Core features and unique value proposition
+2. Technical requirements and implementation
+3. Development timeline and key milestones
+4. MVP scope and initial features`,
+
+          marketValidation: `For this business idea:
 ${sections.audience}
 
-Revenue Model:
-${sections.moneyStory}`;
+Provide market analysis covering:
+1. Target market size and demographics
+2. Customer pain points and needs
+3. Market opportunities and gaps
+4. Competitive landscape analysis`,
 
-      console.log('Sending analysis request to Straico API...');
+          monetization: `Based on this concept:
+${sections.moneyStory}
+
+Detail the monetization approach:
+1. Primary revenue streams
+2. Pricing strategy and models
+3. Customer acquisition costs
+4. Potential upsell opportunities`,
+
+          operations: `For implementing this business:
+${sections.gettingStarted}
+
+Outline operational requirements:
+1. Team structure and key roles
+2. Required resources and tools
+3. Core processes and workflows
+4. Quality assurance measures`,
+
+          growth: `To scale this business:
+${sections.growthPath}
+
+Provide growth strategies covering:
+1. Expansion roadmap
+2. Partnership opportunities
+3. Market penetration tactics
+4. Future development plans`
+        }
+      };
+
       const response = await fetch('https://api.straico.com/v0/rag/prompt', {
         method: 'POST',
         headers: {
@@ -113,9 +106,8 @@ ${sections.moneyStory}`;
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          prompt,
-          model: "anthropic/claude-3.5-sonnet",
-          max_tokens: 4000
+          prompt: JSON.stringify(prompt),
+          model: "anthropic/claude-3.5-sonnet"
         }),
       });
 
@@ -124,19 +116,14 @@ ${sections.moneyStory}`;
       }
 
       const data = await response.json();
-      console.log('Received analysis response:', data);
-      
-      if (data.response?.answer) {
-        setDeepDiveResponse(data.response.answer);
-        toast({
-          title: "Analysis Complete",
-          description: "Your comprehensive business roadmap is ready to explore",
-        });
-      } else {
-        throw new Error('Invalid response format from API');
-      }
+      const deepDiveResponse = data.response.answer;
+      setDeepDiveResponse(deepDiveResponse);
+
+      toast({
+        title: "Analysis Complete",
+        description: "Your business roadmap is ready to explore",
+      });
     } catch (error) {
-      console.error('Analysis error:', error);
       toast({
         title: "Error",
         description: "Failed to generate analysis. Please try again.",
@@ -146,11 +133,6 @@ ${sections.moneyStory}`;
       setLoadingDeepDive(false);
     }
   };
-
-  if (!isReady) {
-    console.log('Card not ready - missing section content');
-    return null;
-  }
 
   return (
     <Card className={`overflow-hidden transition-all duration-300 hover:shadow-xl ${getGradientClass(index)}`}>
@@ -230,12 +212,10 @@ ${sections.moneyStory}`;
                 activeSection={activeSection}
                 setActiveSection={setActiveSection}
               />
-              <div className="mt-4 bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-lg">
-                <ResultContent 
-                  content={deepDiveResponse}
-                  activeSection={activeSection}
-                />
-              </div>
+              <ResultContent 
+                content={deepDiveResponse}
+                activeSection={activeSection}
+              />
             </div>
           )}
         </div>

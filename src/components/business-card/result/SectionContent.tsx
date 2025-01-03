@@ -2,16 +2,22 @@ import React from 'react';
 import ContentLine from './ContentLine';
 
 interface SectionContentProps {
-  content: string;
+  content: string[];
 }
 
 const SectionContent: React.FC<SectionContentProps> = ({ content }) => {
-  const lines = content.split('\n').filter(line => line.trim());
+  const formattedContent = content
+    .join('\n')
+    .replace(/^(\d\.|\•)\s/gm, '')
+    .split('\n')
+    .filter(line => line.trim());
 
   return (
-    <div className="space-y-4">
-      {lines.map((line, i) => {
-        const isTitle = i === 0 || /^[A-Z][A-Z\s]+:/.test(line);
+    <>
+      {formattedContent.map((line, i) => {
+        // Check if the line matches the title pattern (all caps words)
+        const isTitle = i === 0 || Boolean(line.match(/^[A-Z][A-Za-z\s]+$/));
+        
         return (
           <ContentLine
             key={i}
@@ -20,7 +26,7 @@ const SectionContent: React.FC<SectionContentProps> = ({ content }) => {
           />
         );
       })}
-    </div>
+    </>
   );
 };
 

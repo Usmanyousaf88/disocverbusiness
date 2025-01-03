@@ -1,11 +1,8 @@
 import React from "react";
 import BusinessIdeaCard from "./BusinessIdeaCard";
-import BusinessIdeaSkeleton from "./loading/BusinessIdeaSkeleton";
-import AnalysisProgress from "./loading/AnalysisProgress";
 import { Card } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
 
 interface UseCase {
   title: string;
@@ -30,17 +27,9 @@ interface ResultsSectionProps {
   showResults: boolean;
   useCases: UseCase[];
   straicoKey: string;
-  isLoading?: boolean;
-  analysisStage?: "generating" | "analyzing" | "complete";
 }
 
-const ResultsSection: React.FC<ResultsSectionProps> = ({ 
-  showResults, 
-  useCases, 
-  straicoKey, 
-  isLoading = false,
-  analysisStage = "complete" 
-}) => {
+const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, straicoKey }) => {
   if (!showResults) return null;
 
   const splitIdeasFromResponse = (response: string): string[] => {
@@ -69,66 +58,38 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({
     }));
   });
 
-  if (isLoading) {
-    return (
-      <div className="space-y-8">
-        <AnalysisProgress stage={analysisStage} />
-        {[1, 2, 3].map((i) => (
-          <BusinessIdeaSkeleton key={i} />
-        ))}
-      </div>
-    );
-  }
-
   return (
-    <motion.div 
-      className="space-y-8"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="space-y-8 animate-fadeIn">
       <div className="flex items-center gap-3 mb-6">
         <Sparkles className="w-6 h-6 text-primary animate-pulse" />
         <h2 className="text-2xl font-bold text-primary">Your AI-Generated Business Ideas</h2>
       </div>
       
       {/* Success Metrics Chart */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.2 }}
-      >
-        <Card className="p-6 bg-white/80 backdrop-blur-sm">
-          <h3 className="text-xl font-semibold text-primary mb-4">Business Ideas Success Metrics</h3>
-          <div className="h-[400px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="successScore" name="Success Score" fill="#8B5CF6" />
-                <Bar dataKey="costEfficiency" name="Cost Efficiency" fill="#F97316" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </Card>
-      </motion.div>
+      <Card className="p-6 bg-white/80 backdrop-blur-sm">
+        <h3 className="text-xl font-semibold text-primary mb-4">Business Ideas Success Metrics</h3>
+        <div className="h-[400px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="successScore" name="Success Score" fill="#8B5CF6" />
+              <Bar dataKey="costEfficiency" name="Cost Efficiency" fill="#F97316" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </Card>
 
       {/* Business Ideas Cards */}
-      {useCases.map((useCase, index) => {
+      {useCases.map((useCase) => {
         if (!useCase.aiResponse) return null;
         
         const ideas = splitIdeasFromResponse(useCase.aiResponse);
         
         return (
-          <motion.div 
-            key={useCase.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 + index * 0.1 }}
-            className="space-y-6"
-          >
+          <div key={useCase.title} className="space-y-6">
             <Card className="p-6 bg-gradient-to-r from-primary/10 to-primary/5">
               <h3 className="text-xl font-semibold text-primary mb-2">{useCase.title}</h3>
               <p className="text-gray-600">{useCase.description}</p>
@@ -150,24 +111,18 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({
             
             <div className="grid grid-cols-1 gap-6">
               {ideas.map((idea, ideaIndex) => (
-                <motion.div
-                  key={`${useCase.title}-idea-${ideaIndex}`}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.4 + ideaIndex * 0.1 }}
-                >
-                  <BusinessIdeaCard
-                    idea={idea}
-                    index={ideaIndex}
-                    straicoKey={straicoKey}
-                  />
-                </motion.div>
+                <BusinessIdeaCard
+                  key={`idea-${ideaIndex}`}
+                  idea={idea}
+                  index={ideaIndex}
+                  straicoKey={straicoKey}
+                />
               ))}
             </div>
-          </motion.div>
+          </div>
         );
       })}
-    </motion.div>
+    </div>
   );
 };
 
