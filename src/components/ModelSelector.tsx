@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Card } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Info } from "lucide-react";
 
 interface ModelInfo {
   name: string;
@@ -46,11 +51,15 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ selectedModels, onModelsS
     enabled: !!straicoKey,
   });
 
-  const handleModelToggle = (modelId: string) => {
-    if (selectedModels.includes(modelId)) {
-      onModelsSelect(selectedModels.filter(id => id !== modelId));
-    } else {
-      onModelsSelect([...selectedModels, modelId]);
+  const handleModelSelect = (modelId: string) => {
+    onModelsSelect([modelId]); // Only allow one model selection
+    
+    const selectedModel = modelsData?.chat.find((m: ModelInfo) => m.model === modelId);
+    if (selectedModel) {
+      toast({
+        title: "Model Selected",
+        description: `All API calls will now use ${selectedModel.name}. Cost: ${selectedModel.pricing.coins} coins per ${selectedModel.pricing.words} words.`,
+      });
     }
   };
 
@@ -63,28 +72,42 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ selectedModels, onModelsS
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {modelsData?.chat.map((model: ModelInfo) => (
-        <Card key={model.model} className="p-4 hover:shadow-lg transition-shadow">
-          <div className="flex items-start space-x-3">
-            <Checkbox
-              id={model.model}
-              checked={selectedModels.includes(model.model)}
-              onCheckedChange={() => handleModelToggle(model.model)}
-            />
-            <div className="space-y-2">
-              <Label htmlFor={model.model} className="font-medium cursor-pointer">
-                {model.name}
-              </Label>
-              <div className="text-sm text-gray-500 space-y-1">
-                <p>Word limit: {model.word_limit.toLocaleString()}</p>
-                <p>Price: {model.pricing.coins} coins per {model.pricing.words} words</p>
-                <p>Max output: {model.max_output.toLocaleString()} tokens</p>
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <h3 className="text-lg font-medium">Select AI Model</h3>
+        <Info className="h-4 w-4 text-gray-500" />
+      </div>
+      
+      <Select
+        value={selectedModels[0] || ""}
+        onValueChange={handleModelSelect}
+      >
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Choose an AI model" />
+        </SelectTrigger>
+        <SelectContent>
+          {modelsData?.chat.map((model: ModelInfo) => (
+            <SelectItem 
+              key={model.model} 
+              value={model.model}
+              className="cursor-pointer"
+            >
+              <div className="flex flex-col gap-1">
+                <span className="font-medium">{model.name}</span>
+                <span className="text-xs text-gray-500">
+                  {model.pricing.coins} coins/{model.pricing.words} words
+                </span>
               </div>
-            </div>
-          </div>
-        </Card>
-      ))}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      {selectedModels[0] && (
+        <div className="text-sm text-gray-500">
+          Selected model will be used for all API calls
+        </div>
+      )}
     </div>
   );
 };
