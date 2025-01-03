@@ -3,7 +3,7 @@ import { toast } from "@/components/ui/use-toast";
 import InterestSelector from "@/components/InterestSelector";
 import AnalysisButton from "@/components/AnalysisButton";
 import ModelSelector from "@/components/ModelSelector";
-import { generateCombinations, generatePrompt } from "@/utils/combinationGenerator";
+import { generatePrompt } from "@/utils/combinationGenerator";
 
 interface InterestAnalyzerProps {
   straicoKey: string;
@@ -25,7 +25,7 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
   isInterestSelectorCollapsed,
 }) => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
-  const [selectedModel, setSelectedModel] = useState("anthropic/claude-3.5-sonnet");
+  const [selectedModels, setSelectedModels] = useState<string[]>(["anthropic/claude-3-haiku:beta"]);
 
   const getInterestName = (id: string): string => {
     const interest = InterestSelector.predefinedInterests?.find((i) => i.id === id);
@@ -44,7 +44,7 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
     if (!straicoKey) {
       toast({
         title: "Straico API Key Required",
-        description: "Please enter your Straico API key to use the RAG functionality",
+        description: "Please enter your Straico API key to use the functionality",
         variant: "destructive",
       });
       return;
@@ -64,18 +64,20 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
     
     try {
       console.log('Making request to Straico API with key:', straicoKey.substring(0, 4) + '...');
-      const combinations = generateCombinations(selectedInterests);
-      const prompt = generatePrompt(combinations.map(combo => combo.map(getInterestName)));
+      const interestNames = selectedInterests.map(getInterestName);
+      const prompt = `Generate innovative business ideas that combine these interests/skills: ${interestNames.join(", ")}. 
+      For each combination, provide detailed analysis including target market, revenue potential, and implementation steps.
+      Format each idea with "---" between them.`;
 
-      const response = await fetch('https://api.straico.com/v0/rag/prompt', {
+      const response = await fetch('https://api.straico.com/v1/prompt/completion', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${straicoKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          prompt: prompt,
-          model: selectedModel
+          models: selectedModels,
+          message: prompt
         }),
       });
 
@@ -87,21 +89,21 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
 
       const data = await response.json();
       console.log('Straico API response:', data);
-      
-      if (!data.response?.answer) {
-        throw new Error('Invalid response format from Straico API');
-      }
 
-      setUseCases([{
-        title: "Combined Interests Analysis",
+      const completions = Object.entries(data.data.completions).map(([model, completion]: [string, any]) => ({
+        title: `${model.split('/')[1]} Analysis`,
         description: "AI-generated business opportunities based on your interests",
         steps: ["Analyze market opportunities", "Identify target audience", "Create initial offering", "Test and validate"],
         audience: "Entrepreneurs interested in " + selectedInterests.map(getInterestName).join(", "),
         prompt: prompt,
-        aiResponse: data.response.answer,
-      }]);
-      
+        aiResponse: completion.completion.choices[0].message.content,
+        price: completion.price,
+        words: completion.words
+      }));
+
+      setUseCases(completions);
       setShowResults(true);
+      
       toast({
         title: "Success!",
         description: "Generated business opportunities based on your interests",
@@ -124,10 +126,10 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
         <h2 className="text-2xl font-semibold mb-6">Select Your Interests</h2>
         
         <div className="mb-8">
-          <h3 className="text-lg font-medium mb-2">Choose AI Model</h3>
+          <h3 className="text-lg font-medium mb-2">Choose AI Models</h3>
           <ModelSelector 
-            selectedModel={selectedModel}
-            onModelSelect={setSelectedModel}
+            selectedModels={selectedModels}
+            onModelsSelect={setSelectedModels}
           />
         </div>
 

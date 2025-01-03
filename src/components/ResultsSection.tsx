@@ -8,6 +8,16 @@ interface UseCase {
   audience: string;
   prompt: string;
   aiResponse?: string;
+  price?: {
+    input: number;
+    output: number;
+    total: number;
+  };
+  words?: {
+    input: number;
+    output: number;
+    total: number;
+  };
 }
 
 interface ResultsSectionProps {
@@ -41,6 +51,12 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
                 <span className="text-sm font-medium text-gray-500">Target Audience:</span>
                 <p className="text-gray-700">{useCase.audience}</p>
               </div>
+              {useCase.price && (
+                <div className="mt-4 text-sm">
+                  <p className="text-gray-600">Processing Cost: ${useCase.price.total.toFixed(2)}</p>
+                  <p className="text-gray-600">Words Processed: {useCase.words?.total}</p>
+                </div>
+              )}
             </div>
             
             {ideas.map((idea, ideaIndex) => (
