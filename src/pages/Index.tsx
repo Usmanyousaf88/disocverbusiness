@@ -20,14 +20,15 @@ const Index = () => {
   }>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [straicoKey, setStraicoKey] = useState("");
-  const [analysisStage, setAnalysisStage] = useState<"generating" | "analyzing" | "complete">("generating");
 
   useEffect(() => {
+    // Load Straico key from localStorage
     const savedStraicoKey = localStorage.getItem('straico_api_key');
     if (savedStraicoKey) setStraicoKey(savedStraicoKey);
   }, []);
 
   useEffect(() => {
+    // Save Straico key to localStorage when it changes
     if (straicoKey) localStorage.setItem('straico_api_key', straicoKey);
   }, [straicoKey]);
 
@@ -62,8 +63,6 @@ const Index = () => {
           showResults={showResults} 
           useCases={useCases} 
           straicoKey={straicoKey}
-          isLoading={isLoading}
-          analysisStage={analysisStage}
         />
       </div>
     </div>
