@@ -109,10 +109,11 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
               )}
             </Card>
             
+            {/* Render each business idea card exactly once */}
             <div className="grid grid-cols-1 gap-6">
               {ideas.map((idea, ideaIndex) => (
                 <BusinessIdeaCard
-                  key={`idea-${ideaIndex}`}
+                  key={`${useCase.title}-idea-${ideaIndex}`}
                   idea={idea}
                   index={ideaIndex}
                   straicoKey={straicoKey}
