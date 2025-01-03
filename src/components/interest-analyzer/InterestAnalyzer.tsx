@@ -76,37 +76,38 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
 
 const prompt = `As an experienced business consultant, I'd like you to create engaging and detailed business ideas combining these interests/skills: ${interestNames.join(", ")}. 
 
-For each business idea, tell the story in a conversational, easy-to-understand way. Structure each idea like this:
+For each business idea, tell the story in a conversational, easy-to-understand way. Start with an overview paragraph that paints a picture of the business concept in an engaging way. Then structure each idea like this:
 
-1. "The Big Idea" - Start with an exciting hook about what makes this business special
+1. "The Big Idea" - Start with an exciting hook about what makes this business special and how it works in practice
    Summary: Add a brief, compelling one-liner that captures the essence of the idea
 
-2. "Who It's For" - Paint a clear picture of the ideal customers
+2. "Who It's For" - Paint a clear picture of the ideal customers, their pain points, and how this solution helps them
    Summary: Describe your target audience in one memorable sentence
 
-3. "The Money Story" - Explain how it makes money in simple terms
+3. "The Money Story" - Explain how it makes money in simple terms, with specific examples of pricing and revenue streams
    Summary: Capture the core revenue model in a punchy statement
 
-4. "Getting Started" - Break down the first steps in a practical way
+4. "Getting Started" - Break down the first steps in a practical way, like a friend giving advice
    Summary: Highlight the key initial action to take
 
-5. "Growth Path" - Share the vision for how it can grow
+5. "Growth Path" - Share the vision for how it can grow, with realistic milestones
    Summary: Paint the future potential in one exciting sentence
 
-6. "Success Factors" - What will make this work?
+6. "Success Factors" - What will make this work? Include real-world examples and practical tips
    Summary: Identify the single most critical factor for success
 
-Make each idea feel like a conversation, not a business plan. Use everyday language and real examples where possible.
-
-Separate each complete business idea with "---" between them.
+Make each idea feel like a conversation, not a business plan. Use everyday language and real examples where possible. Each section should tell part of the story, flowing naturally from one to the next.
 
 Remember to:
 - Keep it conversational and engaging
-- Use real-world examples where possible
+- Use real-world examples and scenarios
 - Make the opportunities feel tangible and achievable
 - Focus on practical steps and clear value
 - Highlight the human elements of each business
 - Include brief, memorable summaries for each section
+- Add personality and warmth to the descriptions
+
+Separate each complete business idea with "---" between them.
 
 Please provide 3-4 well-thought-out ideas that really bring these interests together in creative ways.`;
 
