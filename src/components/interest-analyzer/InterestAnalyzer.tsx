@@ -106,10 +106,11 @@ Remember to:
 - Highlight the human elements of each business
 - Include brief, memorable summaries for each section
 - Add personality and warmth to the descriptions
+- Give each idea a catchy, memorable name that captures its essence
 
 Separate each complete business idea with "---" between them.
 
-Please provide 3-4 well-thought-out ideas that really bring these interests together in creative ways.`;
+Please provide exactly 5 well-thought-out ideas that really bring these interests together in creative ways.`;
 
       const response = await fetch('https://api.straico.com/v1/prompt/completion', {
         method: 'POST',
@@ -132,6 +133,7 @@ Please provide 3-4 well-thought-out ideas that really bring these interests toge
       const data = await response.json();
       console.log('Straico API response:', data);
 
+      // Ensure we only create one completion per model
       const completions = Object.entries(data.data.completions).map(([model, completion]: [string, any]) => ({
         title: `${model.split('/')[1]} Analysis`,
         description: "AI-generated business opportunities based on your interests",
