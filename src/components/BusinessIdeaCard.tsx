@@ -10,11 +10,10 @@ import BusinessIdeaHeader from "./business-card/BusinessIdeaHeader";
 interface BusinessIdeaCardProps {
   idea: string;
   index: number;
-  apiKey: string;
-  straicoKey: string;  // Added this line
+  straicoKey: string;
 }
 
-const BusinessIdeaCard = ({ idea, index, apiKey, straicoKey }: BusinessIdeaCardProps) => {
+const BusinessIdeaCard = ({ idea, index, straicoKey }: BusinessIdeaCardProps) => {
   const [loadingDeepDive, setLoadingDeepDive] = useState(false);
   const [deepDiveResponse, setDeepDiveResponse] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<ResultSection>('all');
@@ -101,22 +100,15 @@ Success Metrics:
 
 Please format the response clearly with these exact headings and bullet points.`;
 
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch('https://api.straico.com/v0/rag/prompt', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${apiKey}`,
+          'Authorization': `Bearer ${straicoKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: "gpt-4",
-          messages: [
-            {
-              role: "user",
-              content: prompt
-            }
-          ],
-          temperature: 0.7,
-          max_tokens: 2000,
+          prompt: prompt,
+          model: "anthropic/claude-3.5-sonnet"
         }),
       });
 
@@ -125,7 +117,7 @@ Please format the response clearly with these exact headings and bullet points.`
       }
 
       const data = await response.json();
-      const deepDiveResponse = data.choices[0].message.content;
+      const deepDiveResponse = data.response.answer;
       setDeepDiveResponse(deepDiveResponse);
 
       toast({

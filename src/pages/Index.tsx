@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
-import InterestSelector from "@/components/InterestSelector";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import ApiKeyInput from "@/components/ApiKeyInput";
 import StraicoKeyInput from "@/components/StraicoKeyInput";
 import ResultsSection from "@/components/ResultsSection";
-import AnalysisButton from "@/components/AnalysisButton";
-import { generateCombinations, generatePrompt } from "@/utils/combinationGenerator";
 import StraicoUserInfo from '@/components/StraicoUserInfo';
+import InterestAnalyzer from "@/components/interest-analyzer/InterestAnalyzer";
+import HowItWorks from "@/components/interest-analyzer/HowItWorks";
+import PageHeader from "@/components/interest-analyzer/PageHeader";
 
 const Index = () => {
-  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [isInterestSelectorCollapsed, setIsInterestSelectorCollapsed] = useState(false);
   const [useCases, setUseCases] = useState<Array<{
@@ -22,188 +19,51 @@ const Index = () => {
     aiResponse?: string;
   }>>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState("");
   const [straicoKey, setStraicoKey] = useState("");
   const { toast } = useToast();
 
   useEffect(() => {
-    // Load API keys from localStorage
-    const savedApiKey = localStorage.getItem('openai_api_key');
+    // Load Straico key from localStorage
     const savedStraicoKey = localStorage.getItem('straico_api_key');
-    if (savedApiKey) setApiKey(savedApiKey);
     if (savedStraicoKey) setStraicoKey(savedStraicoKey);
   }, []);
 
   useEffect(() => {
-    // Save API keys to localStorage when they change
-    if (apiKey) localStorage.setItem('openai_api_key', apiKey);
+    // Save Straico key to localStorage when it changes
     if (straicoKey) localStorage.setItem('straico_api_key', straicoKey);
-  }, [apiKey, straicoKey]);
-
-  const handleInterestSelect = (id: string) => {
-    setSelectedInterests((prev) =>
-      prev.includes(id)
-        ? prev.filter((interest) => interest !== id)
-        : [...prev, id]
-    );
-  };
-
-  const getInterestName = (id: string): string => {
-    const interest = InterestSelector.predefinedInterests?.find((i) => i.id === id);
-    return interest ? interest.name : "";
-  };
-
-  const handleAnalyze = async () => {
-    if (!apiKey) {
-      toast({
-        title: "API Key Required",
-        description: "Please enter your OpenAI API key to generate combinations",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!straicoKey) {
-      toast({
-        title: "Straico API Key Required",
-        description: "Please enter your Straico API key to use the RAG functionality",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (selectedInterests.length < 3) {
-      toast({
-        title: "Please select at least 3 interests",
-        description: "More interests create more interesting combinations!",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    setIsInterestSelectorCollapsed(true);
-    try {
-      const combinations = generateCombinations(selectedInterests);
-      const prompt = generatePrompt(combinations.map(combo => combo.map(getInterestName)));
-
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: "gpt-4",
-          messages: [
-            {
-              role: "system",
-              content: "You are a business consultant helping entrepreneurs identify unique business opportunities by combining different interests and hobbies. Be specific and actionable in your suggestions."
-            },
-            {
-              role: "user",
-              content: prompt
-            }
-          ],
-          temperature: 0.7,
-          max_tokens: 2000,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch AI response');
-      }
-
-      const data = await response.json();
-      const aiResponse = data.choices[0].message.content;
-
-      setUseCases([{
-        title: "Combined Interests Analysis",
-        description: "AI-generated business opportunities based on your interests",
-        steps: ["Analyze market opportunities", "Identify target audience", "Create initial offering", "Test and validate"],
-        audience: "Entrepreneurs interested in " + selectedInterests.map(getInterestName).join(", "),
-        prompt: prompt,
-        aiResponse: aiResponse,
-      }]);
-      
-      setShowResults(true);
-      toast({
-        title: "Success!",
-        description: "Generated business opportunities based on your interests",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to generate AI responses. Please check your API keys and try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [straicoKey]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-light via-white to-white p-6">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Discover Your Passion-Driven Income
-          </h1>
-          <p className="text-lg text-gray-600 mb-8">
-            Select 3 or more interests to explore unique business opportunities
-          </p>
+        <PageHeader />
 
-          {/* Add StraicoUserInfo component */}
-          {straicoKey && (
-            <div className="mb-8">
-              <StraicoUserInfo straicoKey={straicoKey} />
-            </div>
-          )}
-
-          <div className="bg-white rounded-xl p-6 shadow-lg mb-8 text-left animate-fadeIn">
-            <h2 className="text-xl font-semibold text-primary mb-4">How It Works:</h2>
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-primary font-semibold">1</span>
-                <p className="text-gray-700">Select at least 3 interests that excite you - these can be your hobbies, skills, or passions.</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-primary font-semibold">2</span>
-                <p className="text-gray-700">Our AI will analyze unique combinations of your interests to discover innovative business opportunities.</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-primary font-semibold">3</span>
-                <p className="text-gray-700">For each idea, you'll get detailed insights including potential business names, target audience, and step-by-step startup guide.</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-primary font-semibold">4</span>
-                <p className="text-gray-700">Use the "Dive Deeper" feature to get a complete business roadmap including first steps, potential clients, and marketing strategies.</p>
-              </div>
-            </div>
+        {straicoKey && (
+          <div className="mb-8">
+            <StraicoUserInfo straicoKey={straicoKey} />
           </div>
-        </div>
+        )}
+
+        <HowItWorks />
 
         <div className="bg-gradient-to-br from-white to-gray-50 rounded-lg shadow-lg p-6 mb-8">
-          <ApiKeyInput apiKey={apiKey} setApiKey={setApiKey} />
           <StraicoKeyInput straicoKey={straicoKey} setStraicoKey={setStraicoKey} />
 
-          <h2 className="text-2xl font-semibold mb-6">Select Your Interests</h2>
-          <InterestSelector
-            selectedInterests={selectedInterests}
-            onInterestSelect={handleInterestSelect}
-            isCollapsed={isInterestSelectorCollapsed}
-          />
-          <AnalysisButton
+          <InterestAnalyzer
+            straicoKey={straicoKey}
             isLoading={isLoading}
-            disabled={isLoading || selectedInterests.length < 3}
-            onClick={handleAnalyze}
+            setIsLoading={setIsLoading}
+            setShowResults={setShowResults}
+            setIsInterestSelectorCollapsed={setIsInterestSelectorCollapsed}
+            setUseCases={setUseCases}
+            isInterestSelectorCollapsed={isInterestSelectorCollapsed}
+            toast={toast}
           />
         </div>
 
         <ResultsSection 
           showResults={showResults} 
           useCases={useCases} 
-          apiKey={apiKey}
           straicoKey={straicoKey}
         />
       </div>

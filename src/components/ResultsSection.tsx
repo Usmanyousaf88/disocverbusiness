@@ -13,11 +13,10 @@ interface UseCase {
 interface ResultsSectionProps {
   showResults: boolean;
   useCases: UseCase[];
-  apiKey: string;
   straicoKey: string;
 }
 
-const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, apiKey, straicoKey }) => {
+const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, straicoKey }) => {
   if (!showResults) return null;
 
   const splitIdeasFromResponse = (response: string): string[] => {
@@ -37,7 +36,6 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({ showResults, useCases, 
             key={`idea-${ideaIndex}`}
             idea={idea}
             index={ideaIndex}
-            apiKey={apiKey}
             straicoKey={straicoKey}
           />
         ));
