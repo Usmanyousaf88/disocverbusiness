@@ -11,33 +11,26 @@ interface ResultContentProps {
 }
 
 const ResultContent: React.FC<ResultContentProps> = ({ content, activeSection }) => {
-  const renderSections = (sections: { [key: string]: string }) => {
-    return Object.entries(sections).map(([section, content]) => {
-      const sectionTitle = section.charAt(0).toUpperCase() + section.slice(1)
-        .replace(/([A-Z])/g, ' $1')
-        .trim();
-      
-      const introText = getIntroText(section);
-
-      return (
-        <SectionCard
-          key={section}
-          title={sectionTitle}
-          introText={introText}
-        >
-          <SectionContent content={content} />
-        </SectionCard>
-      );
-    });
-  };
-
-  if (!content) return null;
-
-  const filteredContent = filterContent(content, activeSection);
+  const sections = filterContent(content, activeSection);
   
   return (
     <div className="mt-8">
-      {renderSections(filteredContent)}
+      {Object.entries(sections).map(([section, content]) => {
+        const sectionTitle = section
+          .replace(/([A-Z])/g, ' $1')
+          .replace(/^./, str => str.toUpperCase())
+          .trim();
+        
+        return (
+          <SectionCard
+            key={section}
+            title={sectionTitle}
+            introText={getIntroText(section)}
+          >
+            <SectionContent content={content} />
+          </SectionCard>
+        );
+      })}
     </div>
   );
 };

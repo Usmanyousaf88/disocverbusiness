@@ -59,59 +59,51 @@ const BusinessIdeaCard = ({ idea, index, straicoKey }: BusinessIdeaCardProps) =>
     setLoadingDeepDive(true);
     try {
       console.log('Starting deep dive analysis...');
-      const prompt = {
-        sections: {
-          productDevelopment: `Analyze this business idea and provide detailed insights on product development (min 500 words):
+      const prompt = `Analyze this business idea and provide a detailed breakdown in the following format:
+
+Product Development:
+[Provide detailed product development analysis]
+- Core features and technical requirements
+- Development timeline and milestones
+- MVP scope and roadmap
+[End with a clear summary]
+
+Market Validation:
+[Provide comprehensive market analysis]
+- Target market size and demographics
+- Customer pain points and needs
+- Competitive landscape
+[End with a clear summary]
+
+Monetization:
+[Detail the monetization strategy]
+- Revenue streams and pricing models
+- Customer acquisition costs
+- Financial projections
+[End with a clear summary]
+
+Operations:
+[Outline operational requirements]
+- Team structure and key roles
+- Core processes and workflows
+- Risk management strategies
+[End with a clear summary]
+
+Growth:
+[Provide growth and scaling strategy]
+- Expansion roadmap
+- Partnership opportunities
+- Success metrics and KPIs
+[End with a clear summary]
+
+Business Idea to Analyze:
 ${sections.bigIdea}
 
-Focus on:
-1. Core features and unique value proposition
-2. Technical requirements and implementation
-3. Development timeline and key milestones
-4. MVP scope and initial features
-5. Product roadmap and future enhancements`,
-
-          marketValidation: `For this business idea, provide comprehensive market analysis (min 500 words):
+Target Audience:
 ${sections.audience}
 
-Cover:
-1. Target market size and demographics
-2. Customer pain points and needs
-3. Market opportunities and gaps
-4. Competitive landscape analysis
-5. Market entry strategy`,
-
-          monetization: `Based on this concept, detail the monetization approach (min 500 words):
-${sections.moneyStory}
-
-Include:
-1. Primary and secondary revenue streams
-2. Pricing strategy and models
-3. Customer acquisition costs
-4. Potential upsell opportunities
-5. Financial projections and breakeven analysis`,
-
-          operations: `For implementing this business, outline operational requirements (min 500 words):
-${sections.gettingStarted}
-
-Detail:
-1. Team structure and key roles
-2. Required resources and tools
-3. Core processes and workflows
-4. Quality assurance measures
-5. Risk management and mitigation strategies`,
-
-          growth: `To scale this business, provide comprehensive growth strategies (min 500 words):
-${sections.growthPath}
-
-Include:
-1. Expansion roadmap
-2. Partnership opportunities
-3. Market penetration tactics
-4. Future development plans
-5. Success metrics and KPIs`
-        }
-      };
+Revenue Model:
+${sections.moneyStory}`;
 
       console.log('Sending analysis request to Straico API...');
       const response = await fetch('https://api.straico.com/v0/rag/prompt', {
@@ -121,7 +113,7 @@ Include:
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          prompt: JSON.stringify(prompt),
+          prompt,
           model: "anthropic/claude-3.5-sonnet",
           max_tokens: 4000
         }),
