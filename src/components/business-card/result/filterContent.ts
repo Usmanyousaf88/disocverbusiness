@@ -1,30 +1,31 @@
-export const filterContent = (content: string | null, activeSection: string): string => {
-  if (!content) return '';
+import { ResultSection } from '../FilterButtons';
 
-  // If showing all sections, return the complete content
+export const filterContent = (content: string, activeSection: ResultSection): { [key: string]: string } => {
+  // Split content into sections based on common headers
+  const sections = content.split(/(?=Product Development:|Market Validation:|Monetization:|Operations:|Growth:)/g)
+    .filter(section => section.trim());
+
+  // Create an object to store our sections
+  const contentSections: { [key: string]: string } = {};
+
+  sections.forEach(section => {
+    const [title, ...content] = section.split('\n');
+    const cleanTitle = title.replace(':', '').trim().toLowerCase()
+      .replace(/\s+/g, ''); // Convert "Product Development" to "productDevelopment"
+    
+    contentSections[cleanTitle] = content.join('\n').trim();
+  });
+
+  // If activeSection is 'all', return all sections
   if (activeSection === 'all') {
-    return content;
+    return contentSections;
   }
 
-  // Extract the relevant section based on activeSection
-  const sections = {
-    'product': ['Product Development', 'Technical Requirements', 'Development Timeline'],
-    'market': ['Market Validation', 'Market Analysis', 'Target Market'],
-    'monetization': ['Monetization', 'Revenue Streams', 'Financial Projections'],
-    'operations': ['Operations', 'Business Operations', 'Operational Requirements'],
-    'growth': ['Growth Strategy', 'Growth Path', 'Scaling Strategy']
-  };
+  // Otherwise, return only the requested section
+  const filteredContent: { [key: string]: string } = {};
+  if (contentSections[activeSection]) {
+    filteredContent[activeSection] = contentSections[activeSection];
+  }
 
-  const relevantKeywords = sections[activeSection as keyof typeof sections] || [];
-  
-  // Split content into sections and find matching ones
-  const contentSections = content.split(/(?=\n[A-Z][^a-z\n:]+:)/);
-  
-  const matchingSections = contentSections.filter(section =>
-    relevantKeywords.some(keyword => 
-      section.toLowerCase().includes(keyword.toLowerCase())
-    )
-  );
-
-  return matchingSections.join('\n\n') || 'No specific information available for this section.';
+  return filteredContent;
 };
