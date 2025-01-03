@@ -2,19 +2,15 @@ import React from 'react';
 import ContentLine from './ContentLine';
 
 interface SectionContentProps {
-  content: string[];
+  content: string;
 }
 
 const SectionContent: React.FC<SectionContentProps> = ({ content }) => {
-  const formattedContent = content
-    .join('\n')
-    .split('\n')
-    .filter(line => line.trim())
-    .map(line => line.replace(/^(\d\.|\•)\s/, ''));
+  const lines = content.split('\n').filter(line => line.trim());
 
   return (
     <div className="space-y-4">
-      {formattedContent.map((line, i) => {
+      {lines.map((line, i) => {
         const isTitle = i === 0 || /^[A-Z][A-Z\s]+:/.test(line);
         return (
           <ContentLine

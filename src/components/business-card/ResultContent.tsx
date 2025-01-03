@@ -6,7 +6,7 @@ import { filterContent } from './result/filterContent';
 import { getIntroText } from './result/getIntroText';
 
 interface ResultContentProps {
-  content: string | null;
+  content: string[] | string | null;
   activeSection: ResultSection;
 }
 
@@ -27,13 +27,16 @@ const ResultContent: React.FC<ResultContentProps> = ({ content, activeSection })
           title={sectionTitle}
           introText={introText}
         >
-          <SectionContent content={content} />
+          <SectionContent content={content.join('\n')} />
         </SectionCard>
       );
     });
   };
 
-  const filteredContent = filterContent(content, activeSection);
+  if (!content) return null;
+
+  const contentString = Array.isArray(content) ? content.join('\n') : content;
+  const filteredContent = filterContent(contentString, activeSection);
   
   return (
     <div className="mt-8">
