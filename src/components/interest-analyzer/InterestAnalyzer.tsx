@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Toast } from '@/components/ui/use-toast';
+import { toast } from "@/components/ui/use-toast";
+import { type Toast } from "@/components/ui/toast";
 import InterestSelector from "@/components/InterestSelector";
 import AnalysisButton from "@/components/AnalysisButton";
 import { generateCombinations, generatePrompt } from "@/utils/combinationGenerator";
