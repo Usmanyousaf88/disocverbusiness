@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { toast } from "@/components/ui/use-toast";
 import InterestSelector from "@/components/InterestSelector";
 import AnalysisButton from "@/components/AnalysisButton";
+import ModelSelector from "@/components/ModelSelector";
 import { generateCombinations, generatePrompt } from "@/utils/combinationGenerator";
 
 interface InterestAnalyzerProps {
@@ -24,6 +25,7 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
   isInterestSelectorCollapsed,
 }) => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [selectedModel, setSelectedModel] = useState("anthropic/claude-3.5-sonnet");
 
   const getInterestName = (id: string): string => {
     const interest = InterestSelector.predefinedInterests?.find((i) => i.id === id);
@@ -73,7 +75,7 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
         },
         body: JSON.stringify({
           prompt: prompt,
-          model: "anthropic/claude-3.5-sonnet"
+          model: selectedModel
         }),
       });
 
@@ -118,17 +120,29 @@ const InterestAnalyzer: React.FC<InterestAnalyzerProps> = ({
 
   return (
     <>
-      <h2 className="text-2xl font-semibold mb-6">Select Your Interests</h2>
-      <InterestSelector
-        selectedInterests={selectedInterests}
-        onInterestSelect={handleInterestSelect}
-        isCollapsed={isInterestSelectorCollapsed}
-      />
-      <AnalysisButton
-        isLoading={isLoading}
-        disabled={isLoading || selectedInterests.length < 3}
-        onClick={handleAnalyze}
-      />
+      <div className="space-y-6">
+        <h2 className="text-2xl font-semibold mb-6">Select Your Interests</h2>
+        
+        <div className="mb-8">
+          <h3 className="text-lg font-medium mb-2">Choose AI Model</h3>
+          <ModelSelector 
+            selectedModel={selectedModel}
+            onModelSelect={setSelectedModel}
+          />
+        </div>
+
+        <InterestSelector
+          selectedInterests={selectedInterests}
+          onInterestSelect={handleInterestSelect}
+          isCollapsed={isInterestSelectorCollapsed}
+        />
+        
+        <AnalysisButton
+          isLoading={isLoading}
+          disabled={isLoading || selectedInterests.length < 3}
+          onClick={handleAnalyze}
+        />
+      </div>
     </>
   );
 };
